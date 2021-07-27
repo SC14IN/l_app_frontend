@@ -1,10 +1,17 @@
 // import config from 'config';
-// import { authHeader } from '../_helpers';
+import { authHeader } from '../_helpers';
 
 export const userService = {
     login,
     logout,
-    register
+    register,
+    forgotpassword,
+    resetpassword,
+    getAll,
+    getById,
+    // update,
+    delete: _delete,
+    createuser,
 };
 
 function login(email, password) {
@@ -13,7 +20,7 @@ function login(email, password) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     };
-
+    // console.log('000000 before fetch');
     return fetch('http://localhost:8050/api/login', requestOptions)
         .then(handleResponse)
         .then(user => {
@@ -37,6 +44,70 @@ function register(user) {
 
     return fetch('http://localhost:8050/api/register', requestOptions).then(handleResponse);
 }
+function resetpassword(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch('http://localhost:8050/api/resetPassword', requestOptions).then(handleResponse);
+}
+function forgotpassword(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch('http://localhost:8050/api/forgotPassword', requestOptions).then(handleResponse);
+}
+function getAll() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/listUsers', requestOptions).then(handleResponse);
+}
+
+function getById(id) {
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filter?column=id&string='+id, requestOptions).then(handleResponse);
+}
+
+function createuser(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch('http://localhost:8050/api/createUser', requestOptions).then(handleResponse);
+}
+// function update(user) {
+//     const requestOptions = {
+//         method: 'PUT',
+//         headers: { ...authHeader(), 'Content-Type': 'application/json' },
+//         body: JSON.stringify(user)
+//     };
+
+//     return fetch('http://localhost:8050/api/filter', requestOptions).then(handleResponse);
+// }
+
+function _delete(id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+    // console.log('00000')
+
+    return fetch('http://localhost:8050/api/delUser?id='+id, requestOptions).then(handleResponse);
+}
 function handleResponse(response) {
     return response.text().then(text => {
         const data = text && JSON.parse(text);
@@ -49,6 +120,7 @@ function handleResponse(response) {
 
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
+/////////////////////////////////await
         }
 
         return data;

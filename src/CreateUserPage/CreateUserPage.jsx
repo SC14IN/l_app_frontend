@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { userActions } from '../_actions';
 
-class RegisterPage extends React.Component {
+class CreateUserPage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -12,12 +12,10 @@ class RegisterPage extends React.Component {
             user: {
                 name:'',
                 email:'',
-                password: '',
-                password_confirmation:''
             },
             submitted: false
         };
-        this.handleChange = this.handleChange.bind(this);/////check
+        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -37,17 +35,17 @@ class RegisterPage extends React.Component {
 
         this.setState({ submitted: true });
         const { user } = this.state;
-        if (user.name && user.email && user.password && user.password_confirmation) {
-            this.props.register(user);
+        if (user.email&&user.name) {
+            this.props.createuser(user);
         }
     }
 
     render() {
-        const { registering  } = this.props;
+        const { create  } = this.props;
         const { user, submitted } = this.state;
         return (
             <div className="col-md-6 col-md-offset-3">
-                <h2>Register</h2>
+                <h2>Create User</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group' + (submitted && !user.name ? ' has-error' : '')}>
                         <label htmlFor="name">Name</label>
@@ -63,45 +61,26 @@ class RegisterPage extends React.Component {
                             <div className="help-block">Email is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
-                        <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
-                        {submitted && !user.password &&
-                            <div className="help-block">Password is required</div>
-                        }
-                    </div>
-                    <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
-                        <label htmlFor="password">Re-enter Password</label>
-                        <input type="password" className="form-control" name="password_confirmation" value={user.password_confirmation} onChange={this.handleChange} />
-                        {submitted && !user.password_confirmation &&
-                            <div className="help-block">Password is required</div>
-                        }
-                    </div>
                     <div className="form-group">
-                        <button className="btn btn-primary">Register</button>
-                        {registering && 
+                        <button className="btn btn-primary">Submit</button>
+                        {create && 
                             <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                         }
-                        <div>
-                            Already have an account? 
-                            <Link to="/login" className="btn btn-link">Login</Link>
-                        </div>
-                        {/* <Link to="/login" className="btn btn-link">Cancel</Link> */}
+                        <Link to="/" className="btn btn-link">Cancel</Link>
                     </div>
                 </form>
             </div>
         );
     }
 }
-
 function mapState(state) {
-    const { registering } = state.registration;
-    return { registering };
+    const { create } = state.createuser;
+    return { create };
 }
 
 const actionCreators = {
-    register: userActions.register
+    createuser: userActions.createuser
 }
 
-const connectedRegisterPage = connect(mapState, actionCreators)(RegisterPage);
-export { connectedRegisterPage as RegisterPage };
+const connectedPage = connect(mapState, actionCreators)(CreateUserPage);
+export { connectedPage as CreateUserPage };

@@ -4,20 +4,20 @@ import { connect } from 'react-redux';
 
 import { userActions } from '../_actions';
 
-class RegisterPage extends React.Component {
+class ResetPasswordPage extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             user: {
-                name:'',
+                token:'',
                 email:'',
                 password: '',
                 password_confirmation:''
             },
             submitted: false
         };
-        this.handleChange = this.handleChange.bind(this);/////check
+        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -37,32 +37,32 @@ class RegisterPage extends React.Component {
 
         this.setState({ submitted: true });
         const { user } = this.state;
-        if (user.name && user.email && user.password && user.password_confirmation) {
-            this.props.register(user);
+        if (user.token && user.password && user.password_confirmation) {
+            this.props.resetpassword(user);
         }
     }
 
     render() {
-        const { registering  } = this.props;
+        const { reset  } = this.props;
         const { user, submitted } = this.state;
         return (
             <div className="col-md-6 col-md-offset-3">
-                <h2>Register</h2>
+                <h2>Reset Password</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div className={'form-group' + (submitted && !user.name ? ' has-error' : '')}>
-                        <label htmlFor="name">Name</label>
-                        <input type="text" className="form-control" name="name" value={user.name} onChange={this.handleChange} />
-                        {submitted && !user.name &&
-                            <div className="help-block">Name is required</div>
+                    <div className={'form-group' + (submitted && !user.token ? ' has-error' : '')}>
+                        <label htmlFor="text">Token</label>
+                        <input type="text" className="form-control" name="token" value={user.token} onChange={this.handleChange} />
+                        {submitted && !user.token &&
+                            <div className="help-block">Token is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.email ? ' has-error' : '')}>
+                    {/* <div className={'form-group' + (submitted && !user.email ? ' has-error' : '')}>
                         <label htmlFor="email">Email</label>
                         <input type="email" className="form-control" name="email" value={user.email} onChange={this.handleChange} />
                         {submitted && !user.email &&
                             <div className="help-block">Email is required</div>
                         }
-                    </div>
+                    </div> */}
                     <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
                         <label htmlFor="password">Password</label>
                         <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
@@ -78,15 +78,12 @@ class RegisterPage extends React.Component {
                         }
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary">Register</button>
-                        {registering && 
+                        <button className="btn btn-primary">Submit</button>
+                        {reset && 
                             <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                         }
-                        <div>
-                            Already have an account? 
-                            <Link to="/login" className="btn btn-link">Login</Link>
-                        </div>
-                        {/* <Link to="/login" className="btn btn-link">Cancel</Link> */}
+                        
+                        <Link to="/login" className="btn btn-link">Cancel</Link>
                     </div>
                 </form>
             </div>
@@ -95,13 +92,13 @@ class RegisterPage extends React.Component {
 }
 
 function mapState(state) {
-    const { registering } = state.registration;
-    return { registering };
+    const { reset } = state.resetting;
+    return { reset };
 }
 
 const actionCreators = {
-    register: userActions.register
+    resetpassword: userActions.resetpassword
 }
 
-const connectedRegisterPage = connect(mapState, actionCreators)(RegisterPage);
-export { connectedRegisterPage as RegisterPage };
+const connectedPage = connect(mapState, actionCreators)(ResetPasswordPage);
+export { connectedPage as ResetPasswordPage };
