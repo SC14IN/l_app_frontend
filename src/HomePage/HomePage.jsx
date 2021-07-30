@@ -6,9 +6,7 @@ import { userActions } from '../_actions';
 
 import SideNav from './Sidebar';
 class HomePage extends React.Component {
-    //delete not updating used reload
-    //create user error aithentication ]
-    //add sort and filter (same problem for delete , inbuilt filter not working)
+    //create user error aithentication 
     componentDidMount() {
         this.props.getAll();
     }
@@ -17,57 +15,93 @@ class HomePage extends React.Component {
         // const { deleting } = this.props;
         return (e) => this.props.deleteUser(id);
     }
-    filterByInput(e){
+
+    // filterById(e){
+    //     let input = e.target.value;
+    //     // console.log('a');
+    //     this.props.filterbyid(input);
+    // }
+    filterByName(e){
         let input = e.target.value;
         // console.log('a');
-        this.props.filterByValue({value: input});
+        this.props.filterbyname(input);
+    }
+    filterByEmail(e){
+        let input = e.target.value;
+        // console.log('a');
+        this.props.filterbyemail(input);
+    }
+    filterByRole(e){
+        let input = e.target.value;
+        // console.log('a');
+        this.props.filterbyrole(input);
     }
     
     render() {
         const { users } = this.props;
+        
         return (
-            
-            // <div className="col-md-6 col-md-offset-3">
-            //     <h1>Hi!</h1>
-            //     <h3>All users:</h3>
-            //     <Link to={'/createUser'} className="btn btn-sm btn mb-2">Add User</Link>
-            //     {users.loading && <em>Loading users...</em>}
-            //     {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-            //     {users.items &&
-            //         <ul> 
-            //         {users.items[0].map((user) =>
-            //                 <li key={user.id}>
-            //                     {user.id}<br></br>
-            //                     {user.name}<br></br>
-            //                     {user.email}<br></br>
-            //                     {
-            //                         user.deleting ? <em> - Deleting...</em>
-            //                         : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-            //                         : <span> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
-            //                     }
-            //                 </li>
-            //             )}
-            //         </ul>
-            //     }
-            //     <p>
-            //         <Link to="/login">Logout</Link>
-            //     </p>
-            // </div>
             <div>
+            {/* flexbox */}
                 <SideNav name = 'sidenav'/>
-                {/* <componentName name='sidenav'/> */}
-                {/* <h1>Hi!</h1> */}
-                {/* <h3>All users:</h3>  */}
-                <Link to={'/createUser'} className="btn btn-sm btn-success mb-2">Add User</Link>
+
+                <Link to={'/createUser'} className="btn btn-sm btn-success mb-2">Add User</Link><br></br><br></br>
+                
+                        <div className="control">
+                           <div className="select">
+                                <select>
+                                   <option value="" disabled selected>Sort by</option>
+                                   <option>Name - A-Z</option>
+                                    <option>Name - Z-A</option>
+                                </select>
+                           </div>
+                       </div><br></br>
+                                    
+                <div>Filter By
+                </div>
+                
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                {/* <div className='control' style={{minWidth: "100px"}}>
+                                    <input onChange={e=> {
+                                    //call this method on every change in input
+                                        this.filterById(e);
+                                    }} style={{width: "100%"}} placeholder='Id' type='text'/>
+                                </div> */}
+                                
+                            </th>
+                            <th>
+                                <div className='control' style={{minWidth: "100px"}}>
+                                    <input onChange={e=> {
+                                    //call this method on every change in input
+                                        this.filterByName(e);
+                                    }} style={{width: "100%"}} placeholder='Name' type='text'/>
+                                </div>
+                                
+                            </th>
+                            <th>
+                                <div className='control' style={{minWidth: "100px"}}>
+                                    <input onChange={e=> {
+                                    //call this method on every change in input
+                                        this.filterByEmail(e);
+                                    }} style={{width: "100%"}} placeholder='Email' type='text'/>
+                                </div>
+                            </th>
+                            <th>
+                                {/* <div className='control' style={{minWidth: "100px"}}>
+                                    <input onChange={e=> {
+                                    //call this method on every change in input
+                                        this.filterByRole(e);
+                                    }} style={{width: "100%"}} placeholder='Role' type='text'/>
+                                </div> */}
+                            </th>
+                        </tr>
+                    </thead>
+                {/* </table> */}
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-                <div className='control' style={{minWidth: "300px"}}>
-                    <input onChange={e=> {
-                        //call this method on every change in input
-                        this.filterByInput(e);
-                    }} style={{width: "50%"}} placeholder='Filter by' type='text'/>
-                </div>
-                <table className="table table-striped">
                     <thead>
                         <tr>
                             <th style={{ width: '23%' }}>Id</th>
@@ -78,9 +112,10 @@ class HomePage extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.items && users.items[0].map(user =>
+                
+                        {users.items && users.items.map(user =>
                             <tr key={user.id}>
-                                <td>{user.name}</td>
+                                <td>{user.id}</td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
@@ -122,7 +157,9 @@ const actionCreators = {
     getAll: userActions.getAll,
     deleteUser: userActions.delete,
     createUser: userActions.createuser,
-    filterByValue: userActions.filterbyvalue,
+    filterbyname: userActions.filterbyname,
+    filterbyrole: userActions.filterbyrole,
+    filterbyemail: userActions.filterbyemail,
 }
 
 const connectedHomePage = connect(mapState, actionCreators)(HomePage);

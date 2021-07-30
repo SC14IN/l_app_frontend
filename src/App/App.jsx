@@ -14,14 +14,14 @@ import { ResetPasswordPage } from '../ResetPasswordPage';
 import { CreateUserPage } from '../CreateUserPage';
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-        history.listen((location, action) => {
-            // clear alert on location change
-            this.props.clearAlerts();
-        });
-    }
+    //     history.listen((location, action) => {
+    //         // clear alert on location change
+    //         this.props.clearAlerts();
+    //     });
+    // }
 
     render() {
         const { alert } = this.props;
@@ -41,6 +41,7 @@ class App extends React.Component {
                                 <Route path="/resetpassword" component={ResetPasswordPage} />
                                 {/* <Route path="/createUser" component={CreateUserPage} /> */}
                                 <PrivateRoute exact path="/createUser" component={CreateUserPage} />
+                                
                                 <Redirect from="*" to="/" />
                             </Switch>
                         </Router>

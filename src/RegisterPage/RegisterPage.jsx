@@ -26,7 +26,7 @@ class RegisterPage extends React.Component {
         const { user } = this.state;
         this.setState({
             user: {
-                ...user,
+                ...user,//shallow copy and deepcopy
                 [name]: value
             }
         });

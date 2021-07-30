@@ -1,4 +1,3 @@
-// import config from 'config';
 import { authHeader } from '../_helpers';
 
 export const userService = {
@@ -12,6 +11,10 @@ export const userService = {
     // update,
     delete: _delete,
     createuser,
+    // filterbyid,
+    filterbyname,
+    filterbyemail,
+    filterbyrole,
 };
 
 function login(email, password) {
@@ -70,7 +73,38 @@ function getAll() {
 
     return fetch('http://localhost:8050/api/listUsers', requestOptions).then(handleResponse);
 }
+// function filterbyid(id) {
+//     const requestOptions = {
+//         method: 'GET',
+//         headers: authHeader()
+//     };
 
+//     return fetch('http://localhost:8050/api/filter?column=id&string='+id, requestOptions).then(handleResponse);
+// }
+function filterbyname(name) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filter?column=name&string='+name, requestOptions).then(handleResponse);
+}
+function filterbyemail(email) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filter?column=email&string='+email, requestOptions).then(handleResponse);
+}
+function filterbyrole(role) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filter?column=role&string='+role, requestOptions).then(handleResponse);
+}
 function getById(id) {
     const requestOptions = {
         method: 'POST',
@@ -83,10 +117,10 @@ function getById(id) {
 function createuser(user) {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeader(),
         body: JSON.stringify(user)
     };
-
+    
     return fetch('http://localhost:8050/api/createUser', requestOptions).then(handleResponse);
 }
 // function update(user) {
@@ -120,7 +154,6 @@ function handleResponse(response) {
 
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
-/////////////////////////////////await
         }
 
         return data;

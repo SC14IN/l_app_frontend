@@ -30,8 +30,8 @@ export function users(state = {}, action) {
     case userConstants.DELETE_SUCCESS:
       // console.log(state.items.filter(user => user.id !== action.id));
       // remove deleted user from state
-      // const userList = state.items[0];
-      // console.log(userList);
+      // const userList = state.items;
+      console.log(state.items.filter(user => user.id !== action.id));
       return {
         items: state.items.filter(user => user.id !== action.id),
       };
@@ -51,20 +51,88 @@ export function users(state = {}, action) {
         // })
       // };
     case userConstants.FILTER_BY_VALUE:
-      //the value passed from our presentational component
-      let value = action.value;
-      let filteredValues = state.items[0].filter(user => {
+      // //the value passed from our presentational component
+      let value = action.value.value.toLowerCase();
+
+      let filteredValues = state.items.filter(user => {
         //return any product whose name or designer contains the input box string
         return user.name.toLowerCase().includes(value) ||
-        user.email.toLowerCase().includes(value);
+        user.email.toLowerCase().includes(value)||
+        user.role.toLowerCase().includes(value);
       });
-      console.log(filteredValues);
+      let rest = state.items.filter(user => {
+        //return any product whose name or designer contains the input box string
+        return !(user.name.toLowerCase().includes(value) ||
+        user.email.toLowerCase().includes(value)||
+        user.role.toLowerCase().includes(value));
+      });
+      // console.log('filtervalues',filteredValues);
+      
+      // console.log('values',value);
+      
+      // console.log('state.items',state.items);
       
       return {
         ...state,
-        // items: filteredValues,
+        items: filteredValues.concat(rest),
     };
-   
+
+
+    // case userConstants.FILTERBYID_REQUEST:
+    //   return {
+    //     loading: true
+    //   };
+    // case userConstants.FILTERBYID_SUCCESS:
+    //   return {
+    //     items: action.users
+    //   };
+    // case userConstants.FILTERBYID_FAILURE:
+    //   return {
+    //     error: action.error
+    //   };  
+
+
+      case userConstants.FILTERBYNAME_REQUEST:
+        return {
+          loading: true
+        };
+      case userConstants.FILTERBYNAME_SUCCESS:
+        return {
+          items: action.users
+        };
+      case userConstants.FILTERBYNAME_FAILURE:
+        return {
+          error: action.error
+        };  
+
+
+      case userConstants.FILTERBYEMAIL_REQUEST:
+        return {
+          loading: true
+        };
+      case userConstants.FILTERBYEMAIL_SUCCESS:
+        return {
+          items: action.users
+        };
+      case userConstants.FILTERBYEMAIL_FAILURE:
+        return {
+          error: action.error
+        };  
+
+
+      case userConstants.FILTERBYROLE_REQUEST:
+      return {
+        loading: true
+      };
+      case userConstants.FILTERBYROLE_SUCCESS:
+        return {
+          items: action.users
+        };
+      case userConstants.FILTERBYROLE_FAILURE:
+        return {
+          error: action.error
+        };  
+
     default:
       return state
   }

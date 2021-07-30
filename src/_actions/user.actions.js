@@ -12,7 +12,10 @@ export const userActions = {
     getAll,
     delete: _delete,
     createuser,
-    filterbyvalue,
+    // filterbyid,
+    filterbyname,
+    filterbyemail,
+    filterbyrole,
 };
 
 function login(email, password) {
@@ -162,9 +165,59 @@ function createuser(user) {
     function success(user) { return { type: userConstants.CREATEUSER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.CREATEUSER_FAILURE, error } }
 }
-function filterbyvalue(value) {
+// function filterbyid(id) {
+//     return dispatch => {
+//         dispatch(request());
+//         userService.filterbyid(id)
+//             .then(
+//                 users => dispatch(success(users)),
+//                 error => dispatch(failure(error.toString()))
+//             );
+//     };
+
+//     function request() { return { type: userConstants.FILTERBYID_REQUEST,id } }
+//     function success(users) { return { type: userConstants.FILTERBYID_SUCCESS, users } }
+//     function failure(error) { return { type: userConstants.FILTERBYID_FAILURE, error } }
+// }
+function filterbyrole(role) {
     return dispatch => {
-        dispatch(request(value));
-    }
-    function request() { return { type: userConstants.FILTER_BY_VALUE,value } }
+        dispatch(request());
+        userService.filterbyrole(role)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.FILTERBYROLE_REQUEST,role } }
+    function success(users) { return { type: userConstants.FILTERBYROLE_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYROLE_FAILURE, error } }
+}
+function filterbyname(name) {
+    return dispatch => {
+        dispatch(request());
+        userService.filterbyname(name)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.FILTERBYNAME_REQUEST , name} }
+    function success(users) { return { type: userConstants.FILTERBYNAME_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYNAME_FAILURE, error } }
+}
+function filterbyemail(email) {
+    return dispatch => {
+        dispatch(request());
+        userService.filterbyemail(email)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.FILTERBYEMAIL_REQUEST ,email} }
+    function success(users) { return { type: userConstants.FILTERBYEMAIL_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYEMAIL_FAILURE, error } }
 }
