@@ -12,7 +12,8 @@ import { ForgotPasswordPage } from '../ForgotPasswordPage';
 import { ResetPasswordPage } from '../ResetPasswordPage';
 
 import { CreateUserPage } from '../CreateUserPage';
-
+import { DashboardPage } from '../DashboardPage/DashboardPage';
+import './styles.scss';
 class App extends React.Component {
     // constructor(props) {
     //     super(props);
@@ -36,11 +37,13 @@ class App extends React.Component {
                             <Switch>
                                 <PrivateRoute exact path="/" component={HomePage} />
                                 <Route path="/login" component={LoginPage} />
+                                {/* guest route to login which allows to login page when not logged in  */}
                                 <Route path="/register" component={RegisterPage} />
                                 <Route path="/forgotpassword" component={ForgotPasswordPage} />
                                 <Route path="/resetpassword" component={ResetPasswordPage} />
                                 {/* <Route path="/createUser" component={CreateUserPage} /> */}
                                 <PrivateRoute exact path="/createUser" component={CreateUserPage} />
+                                <PrivateRoute exact path="/dashboard" component={DashboardPage} />
                                 
                                 <Redirect from="*" to="/" />
                             </Switch>

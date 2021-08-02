@@ -7,14 +7,16 @@ export const userService = {
     forgotpassword,
     resetpassword,
     getAll,
-    getById,
+    getbyid,
     // update,
     delete: _delete,
     createuser,
-    // filterbyid,
+    filterbyid,
     filterbyname,
     filterbyemail,
     filterbyrole,
+    getjobs,
+    deletejob,
 };
 
 function login(email, password) {
@@ -73,14 +75,22 @@ function getAll() {
 
     return fetch('http://localhost:8050/api/listUsers', requestOptions).then(handleResponse);
 }
-// function filterbyid(id) {
-//     const requestOptions = {
-//         method: 'GET',
-//         headers: authHeader()
-//     };
+function getjobs() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
 
-//     return fetch('http://localhost:8050/api/filter?column=id&string='+id, requestOptions).then(handleResponse);
-// }
+    return fetch('http://localhost:8050/api/viewJobs', requestOptions).then(handleResponse);
+}
+function filterbyid(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filter?column=id&string='+id, requestOptions).then(handleResponse);
+}
 function filterbyname(name) {
     const requestOptions = {
         method: 'GET',
@@ -105,9 +115,9 @@ function filterbyrole(role) {
 
     return fetch('http://localhost:8050/api/filter?column=role&string='+role, requestOptions).then(handleResponse);
 }
-function getById(id) {
+function getbyid(id) {
     const requestOptions = {
-        method: 'POST',
+        method: 'GET',
         headers: authHeader()
     };
 
@@ -141,6 +151,15 @@ function _delete(id) {
     // console.log('00000')
 
     return fetch('http://localhost:8050/api/delUser?id='+id, requestOptions).then(handleResponse);
+}
+function deletejob(id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+    // console.log('00000')
+
+    return fetch('http://localhost:8050/api/deleteJob?id='+id, requestOptions).then(handleResponse);
 }
 function handleResponse(response) {
     return response.text().then(text => {

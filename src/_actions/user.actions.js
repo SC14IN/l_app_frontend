@@ -12,10 +12,13 @@ export const userActions = {
     getAll,
     delete: _delete,
     createuser,
-    // filterbyid,
+    filterbyid,
     filterbyname,
     filterbyemail,
     filterbyrole,
+    getjobs,
+    deletejob,
+    getbyid,
 };
 
 function login(email, password) {
@@ -39,12 +42,10 @@ function login(email, password) {
     function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
 }
-
 function logout() {
     userService.logout();
     return { type: userConstants.LOGOUT };
 }
-
 function register(user) {
     return dispatch => {
         dispatch(request(user));
@@ -165,20 +166,20 @@ function createuser(user) {
     function success(user) { return { type: userConstants.CREATEUSER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.CREATEUSER_FAILURE, error } }
 }
-// function filterbyid(id) {
-//     return dispatch => {
-//         dispatch(request());
-//         userService.filterbyid(id)
-//             .then(
-//                 users => dispatch(success(users)),
-//                 error => dispatch(failure(error.toString()))
-//             );
-//     };
+function filterbyid(id) {
+    return dispatch => {
+        dispatch(request());
+        userService.filterbyid(id)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
 
-//     function request() { return { type: userConstants.FILTERBYID_REQUEST,id } }
-//     function success(users) { return { type: userConstants.FILTERBYID_SUCCESS, users } }
-//     function failure(error) { return { type: userConstants.FILTERBYID_FAILURE, error } }
-// }
+    function request() { return { type: userConstants.FILTERBYID_REQUEST,id } }
+    function success(users) { return { type: userConstants.FILTERBYID_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYID_FAILURE, error } }
+}
 function filterbyrole(role) {
     return dispatch => {
         dispatch(request());
@@ -220,4 +221,52 @@ function filterbyemail(email) {
     function request() { return { type: userConstants.FILTERBYEMAIL_REQUEST ,email} }
     function success(users) { return { type: userConstants.FILTERBYEMAIL_SUCCESS, users } }
     function failure(error) { return { type: userConstants.FILTERBYEMAIL_FAILURE, error } }
+}
+function getjobs() {
+    return dispatch => {
+        dispatch(request());
+        userService.getjobs()
+            .then(
+                jobs => dispatch(success(jobs)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.GETJOBS_REQUEST } }
+    function success(jobs) { return { type: userConstants.GETJOBS_SUCCESS, jobs } }
+    function failure(error) { return { type: userConstants.GETJOBS_FAILURE, error } }
+}
+function deletejob(id) {
+    return dispatch => {
+        dispatch(request(id));
+
+        userService.deletejob(id)
+            .then(
+                user => { 
+                    dispatch(success(id));
+                },
+                error => dispatch(failure(id, error.toString()))
+            );
+    };
+
+    function request(id) { return { type: userConstants.DELETEJOB_REQUEST, id } }
+    function success(id) { return { type: userConstants.DELETEJOB_SUCCESS, id } }
+    function failure(id, error) { return { type: userConstants.DELETEJOB_FAILURE, id, error } }
+}
+function getbyid(id) {
+    return dispatch => {
+        dispatch(request(id));
+
+        userService.getbyid(id)
+            .then(
+                user => { 
+                    dispatch(success(id));
+                },
+                error => dispatch(failure(id, error.toString()))
+            );
+    };
+
+    function request(id) { return { type: userConstants.GETBYID_REQUEST, id } }
+    function success(id) { return { type: userConstants.GETBYID_SUCCESS, id } }
+    function failure(id, error) { return { type: userConstants.GETBYID_FAILURE, id, error } }
 }
