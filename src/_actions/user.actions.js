@@ -19,6 +19,12 @@ export const userActions = {
     getjobs,
     deletejob,
     getbyid,
+    sortbyname,
+    sortbyemail,
+    filterbytd,
+    filterbystatus,
+    filterbyassignee,
+    filterbyassigner,
 };
 
 function login(email, password) {
@@ -269,4 +275,74 @@ function getbyid(id) {
     function request(id) { return { type: userConstants.GETBYID_REQUEST, id } }
     function success(id) { return { type: userConstants.GETBYID_SUCCESS, id } }
     function failure(id, error) { return { type: userConstants.GETBYID_FAILURE, id, error } }
+}
+function sortbyname(direction) {
+    return dispatch => {
+        dispatch(request(direction));
+    };
+
+    function request(direction) { return { type: userConstants.SORT_BY_NAME, direction } }
+}
+function sortbyemail(direction) {
+    return dispatch => {
+        dispatch(request(direction));
+    };
+
+    function request(direction) { return { type: userConstants.SORT_BY_EMAIL, direction } }
+}
+function filterbytd(string) {
+    return dispatch => {
+        dispatch(request());
+        userService.filterbytd(string)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.FILTERBYTD_REQUEST , string} }
+    function success(users) { return { type: userConstants.FILTERBYTD_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYTD_FAILURE, error } }
+}
+function filterbystatus(name) {
+    return dispatch => {
+        dispatch(request());
+        userService.filterbystatus(name)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.FILTERBYSTATUS_REQUEST , name} }
+    function success(users) { return { type: userConstants.FILTERBYSTATUS_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYSTATUS_FAILURE, error } }
+}
+function filterbyassignee(id) {
+    return dispatch => {
+        dispatch(request());
+        userService.filterbyassignee(id)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.FILTERBYASSIGNEE_REQUEST , id} }
+    function success(users) { return { type: userConstants.FILTERBYASSIGNEE_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYASSIGNEE_FAILURE, error } }
+}
+function filterbyassigner(id) {
+    return dispatch => {
+        dispatch(request());
+        userService.filterbyassigner(id)
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.FILTERBYASSIGNER_REQUEST , id} }
+    function success(users) { return { type: userConstants.FILTERBYASSIGNER_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.FILTERBYASSIGNER_FAILURE, error } }
 }

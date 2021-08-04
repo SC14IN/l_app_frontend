@@ -17,6 +17,11 @@ export const userService = {
     filterbyrole,
     getjobs,
     deletejob,
+    filterbytd,
+    filterbystatus,
+    filterbyassigner,
+    filterbyassignee,
+    
 };
 
 function login(email, password) {
@@ -35,7 +40,6 @@ function login(email, password) {
             return user;
         });
 }
-
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
@@ -97,7 +101,7 @@ function filterbyname(name) {
         headers: authHeader()
     };
 
-    return fetch('http://localhost:8050/api/filter?column=name&string='+name, requestOptions).then(handleResponse);
+    return fetch('http://localhost:8050/api/filter?string='+name, requestOptions).then(handleResponse);
 }
 function filterbyemail(email) {
     const requestOptions = {
@@ -123,26 +127,15 @@ function getbyid(id) {
 
     return fetch('http://localhost:8050/api/filter?column=id&string='+id, requestOptions).then(handleResponse);
 }
-
-function createuser(user) {
-    const requestOptions = {
-        method: 'POST',
-        headers: authHeader(),
-        body: JSON.stringify(user)
-    };
-    
-    return fetch('http://localhost:8050/api/createUser', requestOptions).then(handleResponse);
-}
-// function update(user) {
+// function createuser(user) {
 //     const requestOptions = {
-//         method: 'PUT',
-//         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-//         body: JSON.stringify(user)
+//         method: 'GET',
+//         headers: authHeader(),
+        
 //     };
-
-//     return fetch('http://localhost:8050/api/filter', requestOptions).then(handleResponse);
+    
+//     return fetch('http://localhost:8050/api/createUser?name='+user.name+'&email='+user.email, requestOptions).then(handleResponse);
 // }
-
 function _delete(id) {
     const requestOptions = {
         method: 'DELETE',
@@ -160,6 +153,67 @@ function deletejob(id) {
     // console.log('00000')
 
     return fetch('http://localhost:8050/api/deleteJob?id='+id, requestOptions).then(handleResponse);
+}
+function filterbytd(name) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filterJobs?column=title&string='+name, requestOptions).then(handleResponse);
+}
+function filterbystatus(name) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filterJobs?column=status&string='+name, requestOptions).then(handleResponse);
+}
+function filterbyassigner(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filterJobs?column=assigner&string='+id, requestOptions).then(handleResponse);
+}
+function filterbyassignee(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/filterJobs?column=assignee&string='+id, requestOptions).then(handleResponse);
+}
+
+
+// const axios = require('axios');
+import axios from 'axios';
+
+// axios.defaults.baseURL = "http://localhost:8050";
+axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded";
+
+// function createuser(user) {
+//     // Send a POST request
+//     return axios.post('http://localhost:8050/api/createUser', user, { authHeader });
+// }
+function createuser(user) {
+    const u = JSON.parse(localStorage.getItem('user'));
+    const token = u.token;
+    const postData = {name: user.name, email: user.email};
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    return axios.post('http://localhost:8050/api/createUser',postData,config)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      
 }
 function handleResponse(response) {
     return response.text().then(text => {

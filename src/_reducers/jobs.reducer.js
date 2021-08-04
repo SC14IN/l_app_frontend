@@ -1,50 +1,101 @@
-import { userConstants } from '../_constants';
+import { userConstants } from "../_constants";
+
 export function jobs(state = {}, action) {
     switch (action.type) {
         case userConstants.GETJOBS_REQUEST:
-            return {
-                loading: true
-            };
+        return {
+            ...state,
+            loading: true,
+        };
         case userConstants.GETJOBS_SUCCESS:
-            return {
-                items: action.jobs
-            };
+        return {
+            ...state,
+            items: action.jobs,
+        };
         case userConstants.GETJOBS_FAILURE:
-            return {
-                error: action.error
-            };
+        return {
+            ...state,
+            error: action.error,
+        };
         default:
-            return state
+        return state;
 
         case userConstants.DELETEJOB_REQUEST:
-            const ans = {
-                ...state,
-                items: state.items.map(user =>
-                    user.id === action.id
-                    ? { ...user, deleting: true }
-                    : user
-                )
-            }
-            return ans;
+        const ans = {
+            ...state,
+            items: state.items.map((user) =>
+            user.id === action.id ? { ...user, deleting: true } : user
+            ),
+        };
+        return ans;
         case userConstants.DELETEJOB_SUCCESS:
-            return {
-                items: state.items.filter(user => user.id !== action.id),
-            };
+        return {
+            ...state,
+            items: state.items.filter((user) => user.id !== action.id),
+        };
         // case userConstants.DELETE_FAILURE:
-        //   // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
-        //   return {
-        //     ...state,
-        //     items: state.items.map(user => {
-        //       if (user.id === action.id) {
-        //         // make copy of user without 'deleting:true' property
-        //         const { deleting, ...userCopy } = user;
-        //         // return copy of user with 'deleteError:[error]' property
-        //         return { ...userCopy, deleteError: action.error };
-        //       }
+        case userConstants.FILTERBYTD_REQUEST:
+        return {
+            ...state,
+            loading: true,
+        };
+        case userConstants.FILTERBYTD_SUCCESS:
+        return {
+            ...state,
+            items: action.users,
+        };
+        case userConstants.FILTERBYTD_FAILURE:
+        return {
+            ...state,
+            error: action.error,
+        };
 
-        //       return user;
-            // })
-        // };
+        case userConstants.FILTERBYSTATUS_REQUEST:
+        return {
+            ...state,
+            loading: true,
+        };
+        case userConstants.FILTERBYSTATUS_SUCCESS:
+        return {
+            ...state,
+            items: action.users,
+        };
+        case userConstants.FILTERBYSTATUS_FAILURE:
+        return {
+            ...state,
+            error: action.error,
+        };
+        
+        case userConstants.FILTERBYASSIGNEE_REQUEST:
+        return {
+            ...state,
+            loading: true,
+        };
+        case userConstants.FILTERBYASSIGNEE_SUCCESS:
+        return {
+            ...state,
+            items: action.users,
+        };
+        case userConstants.FILTERBYASSIGNEE_FAILURE:
+        return {
+            ...state,
+            error: action.error,
+        };
+        
+        case userConstants.FILTERBYASSIGNER_REQUEST:
+        return {
+            ...state,
+            loading: true,
+        };
+        case userConstants.FILTERBYASSIGNER_SUCCESS:
+        return {
+            ...state,
+            items: action.users,
+        };
+        case userConstants.FILTERBYASSIGNER_FAILURE:
+        return {
+            ...state,
+            error: action.error,
+        };
     }
-
 }

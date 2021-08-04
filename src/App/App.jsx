@@ -12,8 +12,9 @@ import { ForgotPasswordPage } from '../ForgotPasswordPage';
 import { ResetPasswordPage } from '../ResetPasswordPage';
 
 import { CreateUserPage } from '../CreateUserPage';
-import { DashboardPage } from '../DashboardPage/DashboardPage';
-import './styles.scss';
+import { DashboardPage } from '../DashboardPage';
+import { TasksPage } from '../TasksPage';
+// import './styles.scss';
 class App extends React.Component {
     // constructor(props) {
     //     super(props);
@@ -44,6 +45,7 @@ class App extends React.Component {
                                 {/* <Route path="/createUser" component={CreateUserPage} /> */}
                                 <PrivateRoute exact path="/createUser" component={CreateUserPage} />
                                 <PrivateRoute exact path="/dashboard" component={DashboardPage} />
+                                <PrivateRoute exact path="/tasks" component={TasksPage} />
                                 
                                 <Redirect from="*" to="/" />
                             </Switch>

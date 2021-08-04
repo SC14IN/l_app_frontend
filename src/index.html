@@ -1,15 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>L_APP</title>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" /> -->
     <style>
-        a { cursor: pointer; }
-        .help-block { font-size: 12px; }
+      a {
+        cursor: pointer;
+      }
+      .help-block {
+        font-size: 12px;
+      }
+      /* th{background-color: black;} */
+      body {
+        margin: 0;
+      }
+
+      ul.navbar {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 15%;
+        background-color: #f1f1f1;
+        position: fixed;
+        height: 100%;
+        overflow: auto;
+      }
+
+      li a {
+        display: block;
+        color: #000;
+        padding: 8px 16px;
+        text-decoration: none;
+      }
+
+      li a.active {
+        background-color: #04aa6d;
+        color: white;
+      }
+
+      li a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+      }
+      #users {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 80%;
+      }
+
+      #users td,
+      #users th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      #users tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      #users tr:hover {
+        background-color: #ddd;
+      }
+
+      #users th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #04aa6d;
+        color: white;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        width: 50%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        /* display: inline-block; */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button[type="submit"] {
+        width: 10%;
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button[type="submit"]:hover {
+        background-color: #45a049;
+      }
+      .flex-container {
+        display: flex;
+        background-color: #f1f1f1;
+        width: auto;
+        margin-right: 10%;
+      }
+
+      .flex-container > div {
+        margin: 5px;
+        padding: 5px;
+        font-size: 17px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="app"></div>
-</body>
+  </body>
 </html>
