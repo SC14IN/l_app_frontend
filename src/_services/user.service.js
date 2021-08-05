@@ -21,6 +21,7 @@ export const userService = {
     filterbystatus,
     filterbyassigner,
     filterbyassignee,
+    createtask,
     
 };
 
@@ -207,6 +208,22 @@ function createuser(user) {
         headers: { Authorization: `Bearer ${token}` }
     };
     return axios.post('http://localhost:8050/api/createUser',postData,config)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      
+}
+function createtask(user) {
+    const u = JSON.parse(localStorage.getItem('user'));
+    const token = u.token;
+    const postData = user;
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    return axios.post('http://localhost:8050/api/createJob',postData,config)
       .then(function (response) {
         console.log(response);
       })

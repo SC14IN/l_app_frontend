@@ -25,15 +25,18 @@ class DashboardPage extends React.Component {
             </div> 
             <div style={{ marginLeft:'20%' }}>
                 <h2>Tasks</h2>
-                    {jobs.loading && <em>Loading Tasks...</em>}
-                    {jobs.error && <span className="text-danger">ERROR: {jobs.error}</span>}
+                    {/* {jobs.loading && <em>Loading Tasks...</em>}
+                    {jobs.error && <span className="text-danger">ERROR: {jobs.error}</span>} */}
                     <div>
-                        <ul style={{width:'40%',height:'50%'}}>
+                        <ul className='listing' style={{width:'40%',backgroundColor:'#f1f1f1',padding:'20px'}}>
                             {jobs.items && jobs.items.map((item) => {
-                            return <li key={item.id}>
+                            return <li style={{outline:'auto' ,padding:'5px',borderRadius:'0'}} key={item.id}>
                                 <div>
-                                    <h4>{item.title} </h4>.{' '}{item.description}{' '}<br></br>-{item.assignerName},
-                                    {' '}{item.duedate},{' '}{item.status}
+                                    <h4>{item.title}</h4>
+                                    <div style={{wordWrap:'break-word'}}>-{' '}{item.description}{' '}</div>
+                                    <br></br>-{item.assignerName}
+                                    <br></br>Duedate:{' '}{item.duedate},{' '}{item.status}
+                                    
                                 </div>
                             </li>
                             })}

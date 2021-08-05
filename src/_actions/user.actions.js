@@ -25,6 +25,8 @@ export const userActions = {
     filterbystatus,
     filterbyassignee,
     filterbyassigner,
+    createtask,
+    editrequest,
 };
 
 function login(email, password) {
@@ -345,4 +347,33 @@ function filterbyassigner(id) {
     function request() { return { type: userConstants.FILTERBYASSIGNER_REQUEST , id} }
     function success(users) { return { type: userConstants.FILTERBYASSIGNER_SUCCESS, users } }
     function failure(error) { return { type: userConstants.FILTERBYASSIGNER_FAILURE, error } }
+}
+function createtask(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.createtask(user)
+            .then(
+                user => { 
+                    dispatch(success());
+                    history.push('/tasks');
+                    dispatch(alertActions.success('Task created!'));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.CREATETASK_REQUEST, user } }
+    function success(user) { return { type: userConstants.CREATETASK_SUCCESS } }
+    function failure(error) { return { type: userConstants.CREATETASK_FAILURE, error } }
+}
+function editrequest(job) {
+    return dispatch => {
+        dispatch(request(job));
+    };
+    function request(job) { return { type: userConstants.EDIT_REQUEST, job } }
+    
 }

@@ -46,7 +46,7 @@ class ResetPasswordPage extends React.Component {
         const { reset  } = this.props;
         const { user, submitted } = this.state;
         return (
-            <div className="col-md-6 col-md-offset-3">
+            <div className='formdiv'>
                 <h2>Reset Password</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group' + (submitted && !user.token ? ' has-error' : '')}>

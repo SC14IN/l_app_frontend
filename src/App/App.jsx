@@ -14,6 +14,8 @@ import { ResetPasswordPage } from '../ResetPasswordPage';
 import { CreateUserPage } from '../CreateUserPage';
 import { DashboardPage } from '../DashboardPage';
 import { TasksPage } from '../TasksPage';
+import { CreateTaskPage } from '../CreateTaskPage/CreateTaskPage';
+import {EditTaskPage} from '../EditTaskPage';
 // import './styles.scss';
 class App extends React.Component {
     // constructor(props) {
@@ -46,7 +48,8 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/createUser" component={CreateUserPage} />
                                 <PrivateRoute exact path="/dashboard" component={DashboardPage} />
                                 <PrivateRoute exact path="/tasks" component={TasksPage} />
-                                
+                                <PrivateRoute exact path="/createTask" component={CreateTaskPage} />
+                                <PrivateRoute exact path="/editTask" component={EditTaskPage} />
                                 <Redirect from="*" to="/" />
                             </Switch>
                         </Router>
