@@ -5,9 +5,9 @@ export function edit(state = {}, action) {
     case userConstants.EDIT_REQUEST:
       return { ...state,edit: true,job:action.job };
     case userConstants.EDIT_SUCCESS:
-      return {state};
+      return {...state};
     case userConstants.EDIT_FAILURE:
-      return {state};
+      return {...state};
     default:
       return state
   }

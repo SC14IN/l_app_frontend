@@ -5,7 +5,7 @@ export function createtask(state = {}, action) {
     case userConstants.CREATETASK_REQUEST:
       return { ...state,create: true };
     case userConstants.CREATETASK_SUCCESS:
-      return {state};
+      return {...state};
     case userConstants.CREATETASK_FAILURE:
       return {state};
     default:

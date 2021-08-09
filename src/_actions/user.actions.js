@@ -2,7 +2,7 @@ import { userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from './';
 import { history } from '../_helpers';
-
+//check error 
 export const userActions = {
     login,
     logout,
@@ -27,6 +27,9 @@ export const userActions = {
     filterbyassigner,
     createtask,
     editrequest,
+    getvalues,
+    updatestatus,
+    getvaluesbymonth,
 };
 
 function login(email, password) {
@@ -253,6 +256,8 @@ function deletejob(id) {
                 user => { 
                     dispatch(success(id));
                 },
+                
+            ).catch(
                 error => dispatch(failure(id, error.toString()))
             );
     };
@@ -301,7 +306,7 @@ function filterbytd(string) {
                 error => dispatch(failure(error.toString()))
             );
     };
-
+    
     function request() { return { type: userConstants.FILTERBYTD_REQUEST , string} }
     function success(users) { return { type: userConstants.FILTERBYTD_SUCCESS, users } }
     function failure(error) { return { type: userConstants.FILTERBYTD_FAILURE, error } }
@@ -376,4 +381,60 @@ function editrequest(job) {
     };
     function request(job) { return { type: userConstants.EDIT_REQUEST, job } }
     
+}
+function overviewrequest(id) {
+    return dispatch => {
+        dispatch(request(id));
+    };
+    function request(id) { return { type: userConstants.OVERVIEW_REQUEST, id } }
+    
+}
+function getvalues() {
+    return dispatch => {
+        dispatch(request());
+        userService.getvalues()
+            .then(
+                values => dispatch(success(values)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.GETVALUES_REQUEST } }
+    function success(values) { return { type: userConstants.GETVALUES_SUCCESS, values } }
+    function failure(error) { return { type: userConstants.GETVALUES_FAILURE, error } }
+}
+function updatestatus(status,id) {
+    return dispatch => {
+        dispatch(request(status,id));
+
+        userService.updatestatus(status,id)
+            .then(
+                user => { 
+                    dispatch(success());
+                    dispatch(alertActions.success('Status updated'));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(status,id) { return { type: userConstants.UPDATESTATUS_REQUEST, status,id } }
+    function success(status) { return { type: userConstants.UPDATESTATUS_SUCCESS } }
+    function failure(error) { return { type: userConstants.UPDATESTATUS_FAILURE, error } }
+}
+function getvaluesbymonth() {
+    return dispatch => {
+        dispatch(request());
+        userService.getvaluesbymonth()
+            .then(
+                valuesM => dispatch(success(valuesM)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.GETVALUESM_REQUEST } }
+    function success(valuesM) { return { type: userConstants.GETVALUESM_SUCCESS, valuesM } }
+    function failure(error) { return { type: userConstants.GETVALUESM_FAILURE, error } }
 }

@@ -16,6 +16,8 @@ import { DashboardPage } from '../DashboardPage';
 import { TasksPage } from '../TasksPage';
 import { CreateTaskPage } from '../CreateTaskPage/CreateTaskPage';
 import {EditTaskPage} from '../EditTaskPage';
+import {TaskOverviewPage} from '../TaskOverviewPage';
+// import {TestPage} from '../TestPage';
 // import './styles.scss';
 class App extends React.Component {
     // constructor(props) {
@@ -30,32 +32,34 @@ class App extends React.Component {
     render() {
         const { alert } = this.props;
         return (
-            <div className="jumbotron">
-                <div className="container">
-                    <div className="col-sm-8 col-sm-offset-2">
+            // <div className="jumbotron">
+            //     <div className="container">
+                    <div >
                         {alert.message &&
                             <div className={`alert ${alert.type}`}>{alert.message}</div>
                         }
                         <Router history={history}>
                             <Switch>
-                                <PrivateRoute exact path="/" component={HomePage} />
-                                <Route path="/login" component={LoginPage} />
                                 {/* guest route to login which allows to login page when not logged in  */}
+                                <Route path="/login" component={LoginPage} />
                                 <Route path="/register" component={RegisterPage} />
                                 <Route path="/forgotpassword" component={ForgotPasswordPage} />
                                 <Route path="/resetpassword" component={ResetPasswordPage} />
-                                {/* <Route path="/createUser" component={CreateUserPage} /> */}
+                                <PrivateRoute exact path="/" component={HomePage} />
                                 <PrivateRoute exact path="/createUser" component={CreateUserPage} />
                                 <PrivateRoute exact path="/dashboard" component={DashboardPage} />
                                 <PrivateRoute exact path="/tasks" component={TasksPage} />
                                 <PrivateRoute exact path="/createTask" component={CreateTaskPage} />
                                 <PrivateRoute exact path="/editTask" component={EditTaskPage} />
+                                <PrivateRoute exact path="/overview" component={TaskOverviewPage} />
                                 <Redirect from="*" to="/" />
+
+                                {/* <Route path="/test" component={TestPage} /> */}
                             </Switch>
                         </Router>
                     </div>
-                </div>
-            </div>
+            //     </div>
+            // </div>
         );
     }
 }

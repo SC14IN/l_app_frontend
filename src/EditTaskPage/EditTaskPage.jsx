@@ -7,12 +7,13 @@ import { userActions } from '../_actions';
 class EditTaskPage extends React.Component {
     constructor(props) {
         super(props);
-
+        const {job} = this.props;
+        const copy = {...job};
         this.state = {
             user: {
-                title:'',
-                description:'',
-                duedate:'',
+                title:copy.title,
+                description:copy.description,
+                duedate:copy.duedate,
                 assignee:'',
             },
             submitted: false
@@ -20,6 +21,7 @@ class EditTaskPage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.selectAssignee = this.selectAssignee.bind(this);
+        this.prefilledForm = this.prefilledForm.bind(this);
     }
     componentDidMount() {
         this.props.getUsers();
@@ -34,9 +36,19 @@ class EditTaskPage extends React.Component {
                 [name]: value
             }
         });
-        console.log(user);
+        // console.log(user);
     }
-    
+    prefilledForm(job){
+        const { user } = this.state;
+        this.setState({
+            user : {
+                ...user,
+                title:job.title,
+                description:job.description,
+                duedate:job.duedate
+            }
+        });
+    }
     handleSubmit(event) {
         event.preventDefault();
 
@@ -44,7 +56,7 @@ class EditTaskPage extends React.Component {
         const { user } = this.state;
         if (user.title&&user.description&&user.duedate) {
             // console.log(user);
-            // this.props.createTask(user);
+            // this.props.createTask(user);//call api
         }
     }
     selectAssignee(e){
@@ -61,30 +73,31 @@ class EditTaskPage extends React.Component {
         const { edit,users,job  } = this.props;
         const { user, submitted } = this.state;
         const copy = {...job};
+        
         return (
-            
             <div className='formdiv'>
+            {/* <div>{this.prefilledForm(job)}</div> */}
                 
                 {/* {console.log(job)} */}
                 <h2>Edit Task</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group' + (submitted && !user.title ? ' has-error' : '')}>
-                        <label htmlFor="text">Title<br></br></label>
-                        <input type="text"  name="title" defaultValue={copy.title}  onChange={this.handleChange} />
+                        <label htmlFor="text">Title</label><br></br>
+                        <input type="text"  name="title" value={user.title}  onChange={this.handleChange} />
                         {submitted && !user.title &&
                             <div className="help-block">Title is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.description ? ' has-error' : '')}>
                         <label htmlFor="text">Description</label>
-                        <input type="description"  name="description" defaultValue={copy.description} onChange={this.handleChange} />
+                        <input type="description"  name="description" value={user.description}onChange={this.handleChange} />
                         {submitted && !user.description &&
                             <div className="help-block">Description is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.duedate ? ' has-error' : '')}>
-                        <label htmlFor="text">Duedate(Y-m-d H:i:s)<br></br></label>
-                        <input type="text"  name="duedate" defaultValue={copy.duedate} onChange={this.handleChange} />
+                        <label htmlFor="text">Duedate(Y-m-d H:i:s)<br></br></label><br></br>
+                        <input type="text"  name="duedate" value={user.duedate} onChange={this.handleChange} />
                         {submitted && !user.duedate &&
                             <div className="help-block">duedate is required</div>
                         }
@@ -100,9 +113,9 @@ class EditTaskPage extends React.Component {
                     </div>
                     <div className="form-group">
                         <button className="btn btn-primary" type='submit'>Submit</button>
-                        {edit && 
+                        {/* {edit && 
                             <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                        }
+                        } */}
                         <Link to="/tasks" className="btn btn-link">Cancel</Link>
                     </div>
                 </form>

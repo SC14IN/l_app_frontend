@@ -22,6 +22,9 @@ export const userService = {
     filterbyassigner,
     filterbyassignee,
     createtask,
+    getvalues,
+    updatestatus,
+    getvaluesbymonth,
     
 };
 
@@ -87,6 +90,22 @@ function getjobs() {
     };
 
     return fetch('http://localhost:8050/api/viewJobs', requestOptions).then(handleResponse);
+}
+function getvalues(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/getValues?id=', requestOptions).then(handleResponse);
+}
+function getvaluesbymonth() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/getMonthlyValues', requestOptions).then(handleResponse);
 }
 function filterbyid(id) {
     const requestOptions = {
@@ -224,6 +243,22 @@ function createtask(user) {
         headers: { Authorization: `Bearer ${token}` }
     };
     return axios.post('http://localhost:8050/api/createJob',postData,config)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      
+}
+function updatestatus(status,id) {
+    const u = JSON.parse(localStorage.getItem('user'));
+    const token = u.token;
+    const postData = {'status':status,'id':id};
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    return axios.put('http://localhost:8050/api/updateStatus',postData,config)
       .then(function (response) {
         console.log(response);
       })

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { history } from '../_helpers';
 
 import { userActions } from '../_actions';
 // import './HomePage.html';
@@ -46,6 +47,10 @@ class HomePage extends React.Component {
         }
         // can cort by id
     }
+    userOverview(overviewId){
+        this.props.dispatchId(overviewId);
+        history.push('/overview');
+    }
     render() {
         const { users } = this.props;
         
@@ -54,13 +59,13 @@ class HomePage extends React.Component {
             <div  style={{backgroundColor:'#555',height:'40px' }}>
             </div>
                 {/* <SideNav name = 'sidenav'/> */}
-                <ul className = 'navbar'>
+                <ul className = 'navbar0'>
                     <li><a className="active" href="/">Home</a></li>
                     <li><a href='/dashboard'>Dashboard</a></li>
                     <li><a href="/tasks">Tasks</a></li>
                 </ul>
-                <section className='section' style={{marginLeft:'20%'}}>
-                <Link to={'/createUser'} className="btn btn-sm btn-success mb-2">Add User</Link><br></br><br></br>
+                <section className='section' style={{marginLeft:'20%'}}><br></br>
+                <Link to={'/createUser'} className="btn btn-sm btn-success mb-2">Add User</Link><br></br>
                 
                 <div className="control">
                    <div className="select">
@@ -101,7 +106,9 @@ class HomePage extends React.Component {
                         {users.items && users.items.map(user =>
                             <tr key={user.id}>
                                 <td>{user.id}</td>
-                                <td>{user.name}</td>
+                                <td>
+                                <a className='link-button' onClick={() => this.userOverview(user.id)}>{user.name}</a>
+                                </td>
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
                                 <td style={{ whiteSpace: 'nowrap' }}>
@@ -149,6 +156,7 @@ const actionCreators = {
     filterbyemail: userActions.filterbyemail,
     sortbyname: userActions.sortbyname,
     sortbyemail: userActions.sortbyemail,
+    dispatchId: userActions.overviewrequest,
 }
 
 const connectedHomePage = connect(mapState, actionCreators)(HomePage);

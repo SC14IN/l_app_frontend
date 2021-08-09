@@ -17,8 +17,6 @@ export function jobs(state = {}, action) {
             ...state,
             error: action.error,
         };
-        default:
-        return state;
 
         case userConstants.DELETEJOB_REQUEST:
         const ans = {
@@ -29,9 +27,10 @@ export function jobs(state = {}, action) {
         };
         return ans;
         case userConstants.DELETEJOB_SUCCESS:
+            // console.log(state.items.filter((user) => user.id !== action.id));
         return {
             ...state,
-            items: state.items.filter((user) => user.id !== action.id),
+            items: state.items.filter((user) => user.id != action.id),
         };
         // case userConstants.DELETE_FAILURE:
         case userConstants.FILTERBYTD_REQUEST:
@@ -97,5 +96,40 @@ export function jobs(state = {}, action) {
             ...state,
             error: action.error,
         };
+
+        case userConstants.GETVALUES_REQUEST:
+        return {
+            ...state,
+            loading: true,
+        };
+        case userConstants.GETVALUES_SUCCESS:
+        return {
+            ...state,
+            values: action.values,
+        };
+        case userConstants.GETVALUES_FAILURE:
+        return {
+            ...state,
+            error: action.error,
+        };
+
+        case userConstants.GETVALUESM_REQUEST:
+        return {
+            ...state,
+            loading: true,
+        };
+        case userConstants.GETVALUESM_SUCCESS:
+        return {
+            ...state,
+            monthlyValues: action.valuesM,
+        };
+        case userConstants.GETVALUESM_FAILURE:
+        return {
+            ...state,
+            error: action.error,
+        };
+
+        default:
+        return state;
     }
 }
