@@ -13,8 +13,8 @@ variablePie(Highcharts);
 class DashboardPage extends React.Component {
   componentDidMount() {
     this.props.getjobs();
-        this.props.getValuesByMonth();
-        this.props.getValues();
+    this.props.getValuesByMonth();
+    this.props.getValues();
   }
   handleDeleteUser(id) {
     this.props.deletejob(id);
@@ -43,7 +43,7 @@ class DashboardPage extends React.Component {
           <h2>Tasks</h2>
           {/* {jobs.loading && <em>Loading Tasks...</em>}
                     {jobs.error && <span className="text-danger">ERROR: {jobs.error}</span>} */}
-          <div >
+          <div>
             <ul
               className="listing"
               style={{

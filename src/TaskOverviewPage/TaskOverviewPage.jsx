@@ -16,8 +16,10 @@ class TaskOverviewPage extends React.Component {
     componentDidMount() {
         this.props.getUsers();
         this.props.getjobs();
-        this.props.getValues();
-        this.props.getValuesByMonth();
+        let overviewId = JSON.parse(localStorage.getItem('overviewId'));
+        this.props.getValues(overviewId);
+        this.props.getValuesByMonth(overviewId);
+        localStorage.removeItem('overviewId');
     }
     render() {
         const { jobs, users } = this.props;

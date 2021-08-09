@@ -48,7 +48,7 @@ class HomePage extends React.Component {
         // can cort by id
     }
     userOverview(overviewId){
-        this.props.dispatchId(overviewId);
+        localStorage.setItem('overviewId', JSON.stringify(overviewId));
         history.push('/overview');
     }
     render() {

@@ -389,10 +389,10 @@ function overviewrequest(id) {
     function request(id) { return { type: userConstants.OVERVIEW_REQUEST, id } }
     
 }
-function getvalues() {
+function getvalues(id) {
     return dispatch => {
         dispatch(request());
-        userService.getvalues()
+        userService.getvalues(id)
             .then(
                 values => dispatch(success(values)),
                 error => dispatch(failure(error.toString()))
@@ -424,10 +424,10 @@ function updatestatus(status,id) {
     function success(status) { return { type: userConstants.UPDATESTATUS_SUCCESS } }
     function failure(error) { return { type: userConstants.UPDATESTATUS_FAILURE, error } }
 }
-function getvaluesbymonth() {
+function getvaluesbymonth(id) {
     return dispatch => {
         dispatch(request());
-        userService.getvaluesbymonth()
+        userService.getvaluesbymonth(id)
             .then(
                 valuesM => dispatch(success(valuesM)),
                 error => dispatch(failure(error.toString()))

@@ -97,15 +97,15 @@ function getvalues(id) {
         headers: authHeader()
     };
 
-    return fetch('http://localhost:8050/api/getValues?id=', requestOptions).then(handleResponse);
+    return fetch('http://localhost:8050/api/getValues?id='+id, requestOptions).then(handleResponse);
 }
-function getvaluesbymonth() {
+function getvaluesbymonth(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch('http://localhost:8050/api/getMonthlyValues', requestOptions).then(handleResponse);
+    return fetch('http://localhost:8050/api/getMonthlyValues?id='+id, requestOptions).then(handleResponse);
 }
 function filterbyid(id) {
     const requestOptions = {
