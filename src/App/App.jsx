@@ -17,6 +17,9 @@ import { TasksPage } from '../TasksPage';
 import { CreateTaskPage } from '../CreateTaskPage/CreateTaskPage';
 import {EditTaskPage} from '../EditTaskPage';
 import {TaskOverviewPage} from '../TaskOverviewPage';
+import { UserPage } from '../UserPage';
+import { VerifyPage } from '../VerifyPage';
+
 // import {TestPage} from '../TestPage';
 // import './styles.scss';
 class App extends React.Component {
@@ -32,8 +35,8 @@ class App extends React.Component {
     render() {
         const { alert } = this.props;
         return (
-            // <div className="jumbotron">
-            //     <div className="container">
+            <div className="jumbotron">
+                <div className="container">
                     <div >
                         {alert.message &&
                             <div className={`alert ${alert.type}`}>{alert.message}</div>
@@ -43,6 +46,7 @@ class App extends React.Component {
                                 {/* guest route to login which allows to login page when not logged in  */}
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/register" component={RegisterPage} />
+                                <Route path="/verify" component={VerifyPage} />
                                 <Route path="/forgotpassword" component={ForgotPasswordPage} />
                                 <Route path="/resetpassword" component={ResetPasswordPage} />
                                 <PrivateRoute exact path="/" component={HomePage} />
@@ -52,14 +56,15 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/createTask" component={CreateTaskPage} />
                                 <PrivateRoute exact path="/editTask" component={EditTaskPage} />
                                 <PrivateRoute exact path="/overview" component={TaskOverviewPage} />
+                                <PrivateRoute exact path="/performance" component={UserPage} />
                                 <Redirect from="*" to="/" />
 
                                 {/* <Route path="/test" component={TestPage} /> */}
                             </Switch>
                         </Router>
                     </div>
-            //     </div>
-            // </div>
+                 </div>
+             </div>
         );
     }
 }

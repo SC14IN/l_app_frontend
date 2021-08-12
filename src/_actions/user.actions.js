@@ -1,4 +1,4 @@
-import { userConstants } from '../_constants';
+import { alertConstants, userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from './';
 import { history } from '../_helpers';
@@ -21,7 +21,6 @@ export const userActions = {
     getbyid,
     sortbyname,
     sortbyemail,
-    filterbytd,
     filterbystatus,
     filterbyassignee,
     filterbyassigner,
@@ -30,12 +29,18 @@ export const userActions = {
     getvalues,
     updatestatus,
     getvaluesbymonth,
+    getuser,
+    verifyuser,
+    deleteself,
+    filtertasks,
+
 };
 
 function login(email, password) {
     return dispatch => {
         dispatch(request({ email }));
 
+        dispatch({type:alertConstants.CLEAR});
         userService.login(email, password)
             .then(
                 user => { 
@@ -60,13 +65,33 @@ function logout() {
 function register(user) {
     return dispatch => {
         dispatch(request(user));
-
         userService.register(user)
             .then(
                 user => { 
                     dispatch(success());
-                    history.push('/login');
+                    history.push('/verify');
                     dispatch(alertActions.success('Registration successful'));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
+    function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
+}
+function verifyuser(user) {
+    return dispatch => {
+        dispatch(request(user));
+        userService.verifyuser(user)
+            .then(
+                user => { 
+                    dispatch(success());
+                    history.push('/login');
+                    dispatch(alertActions.success('Verification successful'));
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -100,6 +125,24 @@ function forgotpassword(user) {
     function request(user) { return { type: userConstants.FORGOTPASS_REQUEST, user } }
     function success(user) { return { type: userConstants.FORGOTPASS_SUCCESS, user } }
     function failure(error) { return { type: userConstants.FORGOTPASS_FAILURE, error } }
+}
+function deleteself() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.deleteself()
+            .then(
+                user => { 
+                    dispatch(success());
+                    history.push('/login');
+                },
+                error => dispatch(failure( error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.DELETESELF_REQUEST } }
+    function success() { return { type: userConstants.DELETESLEF_SUCCESS } }
+    function failure( error) { return { type: userConstants.DELETESELF_FAILURE, error } }
 }
 function resetpassword(user) {
     return dispatch => {
@@ -162,11 +205,12 @@ function createuser(user) {
         userService.createuser(user)
             .then(
                 user => { 
-                    dispatch(success());
-                    history.push('/');
-                    dispatch(alertActions.success('Token sent to email'));
+                    dispatch(success(user));
+                    history.push('/resetpassword');
+                    // dispatch(alertActions.success('Token sent to email'));
                 },
                 error => {
+                    // console.log(error);
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
                 }
@@ -297,18 +341,18 @@ function sortbyemail(direction) {
 
     function request(direction) { return { type: userConstants.SORT_BY_EMAIL, direction } }
 }
-function filterbytd(string) {
+function filtertasks(filter) {
     return dispatch => {
-        dispatch(request());
-        userService.filterbytd(string)
+        dispatch(request(filter));
+        userService.filtertasks(filter)
             .then(
-                users => dispatch(success(users)),
+                jobs => dispatch(success(jobs)),
                 error => dispatch(failure(error.toString()))
             );
     };
     
-    function request() { return { type: userConstants.FILTERBYTD_REQUEST , string} }
-    function success(users) { return { type: userConstants.FILTERBYTD_SUCCESS, users } }
+    function request(filter) { return { type: userConstants.FILTERBYTD_REQUEST , filter} }
+    function success(jobs) { return { type: userConstants.FILTERBYTD_SUCCESS, jobs } }
     function failure(error) { return { type: userConstants.FILTERBYTD_FAILURE, error } }
 }
 function filterbystatus(name) {
@@ -437,4 +481,18 @@ function getvaluesbymonth(id) {
     function request() { return { type: userConstants.GETVALUESM_REQUEST } }
     function success(valuesM) { return { type: userConstants.GETVALUESM_SUCCESS, valuesM } }
     function failure(error) { return { type: userConstants.GETVALUESM_FAILURE, error } }
+}
+function getuser() {
+    return dispatch => {
+        dispatch(request());
+        userService.getuser()
+            .then(
+                user => dispatch(success(user)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userConstants.GETUSER_REQUEST } }
+    function success(user) { return { type: userConstants.GETUSER_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.GETUSER_FAILURE, error } }
 }

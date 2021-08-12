@@ -76,6 +76,9 @@ class RegisterPage extends React.Component {
                         {submitted && !user.password_confirmation &&
                             <div className="help-block">Password is required</div>
                         }
+                        <h6 style={{fontSize:'10px'}}>
+                        {'Password should contain atleast 8 characters including atleast one of each lowercase,  uppercase, digit and special character(~!@#$%^&*).'}
+                        </h6>
                     </div>
                     <div className="form-group">
                         <button className="btn btn-primary" type = 'submit'>Register</button>

@@ -7,7 +7,7 @@ export function createuser(state = {}, action) {
     case userConstants.CREATEUSER_SUCCESS:
       return {};
     case userConstants.CREATEUSER_FAILURE:
-      return {};
+      return {create: false};
     default:
       return state
   }

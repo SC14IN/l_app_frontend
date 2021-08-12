@@ -11,6 +11,7 @@ import {jobs} from './jobs.reducer';
 import {createtask} from './createtask.reducer';
 import {edit} from './edit.reducer';
 import { overview } from './overview.reducer';
+import {verify} from './verify.reducer';
 const rootReducer = combineReducers({
   authentication,
   registration,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   createtask,
   edit,
   overview,
+  verify,
 });
 
 export default rootReducer;

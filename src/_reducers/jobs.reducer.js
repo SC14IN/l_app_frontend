@@ -41,7 +41,7 @@ export function jobs(state = {}, action) {
         case userConstants.FILTERBYTD_SUCCESS:
         return {
             ...state,
-            items: action.users,
+            items: action.jobs,
         };
         case userConstants.FILTERBYTD_FAILURE:
         return {

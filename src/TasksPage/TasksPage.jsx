@@ -15,6 +15,23 @@ variablePie(Highcharts);
 
   
 class TasksPage extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            filter: {
+                string:'',
+                status:'',
+                assigner:'',
+                assignee:'',
+            }
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.selectAssignee = this.selectAssignee.bind(this);
+        this.selectAssigner = this.selectAssigner.bind(this);
+        this.selectStatus = this.selectStatus.bind(this);
+    }
+
     componentDidMount() {
         this.props.getUsers();
         this.props.getjobs();
@@ -29,44 +46,6 @@ class TasksPage extends React.Component {
         // console.log(job);
         history.push('/editTask');
     }
-    filterTD(e){
-        let input = e.target.value;
-        this.props.filterTD(input);
-    }
-    selectStatus = (e) => {
-        let idx = e.target.selectedIndex;
-        if (idx == 1){
-            this.props.filterbystatus('all');
-        }
-        else if(idx==2){
-            this.props.filterbystatus('inprogress');
-        }
-        else if(idx==3){
-            this.props.filterbystatus('completed');
-        }
-        else{
-            this.props.filterbystatus('overdue');
-        }
-    }
-    selectAssignee = (e) => {
-        this.props.filterbyassignee(e.target.value);
-    }
-    selectAssigner = (e) => {
-        this.props.filterbyassigner(e.target.value);
-    }
-    // selectOptions = (e) =>{
-    //     let idx = e.target.selectedIndex;
-    //     let dataset = e.target.options[idx].dataset.clm;
-    //     if (idx == 1){
-    //         this.props.filterbystatus('all');
-    //     }
-    //     else if(idx==2){
-    //         this.handleEditUser(dataset);
-    //     }
-    //     else if(idx==3){
-    //         this.handleDeleteUser(dataset);
-    //     }
-    // }
     updateStatus = (e) =>{
         let idx = e.target.selectedIndex;
         let dataset = e.target.options[idx].dataset;
@@ -77,18 +56,60 @@ class TasksPage extends React.Component {
             this.props.updatestatus('completed',dataset.id);
         }
     }
+    filterTD(e){
+        let input = e.target.value;
+        const { filter } = this.state;
+        this.setState({
+            filter:{
+                ...filter,
+                 string:input
+                }
+        });
+    }
+    selectStatus(e){
+        const { filter } = this.state;
+        this.setState({
+            filter:{
+                ...filter,
+                 status:e.target.value
+                }
+        });
+    }
+    selectAssignee(e){
+        const { filter } = this.state;
+        this.setState({
+            filter:{
+                ...filter,
+                 assignee:e.target.value
+                }
+        });
+    }
+    selectAssigner(e){
+        const { filter } = this.state;
+        this.setState({
+            filter:{
+                ...filter,
+                assigner:e.target.value
+                }
+        });
+    }
     
-    render() {
+    handleSubmit() {
+        // console.log(1);
+        const { filter } = this.state;
+        console.log(filter);
+        this.props.filtertasks({...filter});
+    }
+    render( ) {
         const { jobs,users } = this.props;
         const{user} = this.props;
-        console.log(jobs);
         return (
             <div>
                 <div  className='top-header' >
                 </div>
                 <div>
                     <ul className = 'navbar0'>
-                        <li><a href="/">Home</a></li>
+                        <li><a href="/">Users</a></li>
                         <li><a  href='/dashboard'>Dashboard</a></li>
                         <li><a className="active" href="/tasks">Tasks</a></li>
                     </ul>
@@ -101,8 +122,13 @@ class TasksPage extends React.Component {
                             <li><a  href='/overview'>Overview</a></li>
                             <li><a  href="/tasks">Archived</a></li>
                         </ul>
-                    
+                    <div className='flex-container'>
                     <h2>Tasks</h2>
+                    <div className='link-1' style={{flexGrow:'8'}}>
+                                <Link to={'/createtask'} className='link' style={{float:'right'}}>Add new</Link>
+
+                            </div>
+                            </div>
                     <div className='flex-container-fixed'>
                     <div className='flex-container'>
                             <div style={{width: "30%"}}>
@@ -115,16 +141,14 @@ class TasksPage extends React.Component {
                             <div className='status'>
                                 <select style={{width: "50%",backgroundColor:'#f1f1f1'}} onChange={this.selectStatus}>
                                     <option >All</option>
-                                    <option data-clm='name' >In progress</option>
-                                    <option data-clm='email'>Completed</option>
-                                    <option data-clm='email'>Overdue</option>
+                                    <option  >Inprogress</option>
+                                    <option >CompletedOnTime</option>
+                                    <option >CompletedAfterDeadline</option>
+                                    <option >Overdue</option>
                                 </select>
                             </div>
                             <div style={{width: "1%"}}></div>
-                            <div className='link'>
-                                <Link to={'/createtask'} className='link' style={{float:'right'}}>Add new</Link>
-
-                            </div>
+                            
                     </div><br></br>
                     <div className='flex-container'>
                             <div >Assigner</div>
@@ -133,7 +157,7 @@ class TasksPage extends React.Component {
                                     <option >All</option>
                                     {users.items && users.items.map((item) => (
                                         
-                                        <option value={item.id}>{item.email}</option>
+                                        <option value={item.id} key={item.id}>{item.email}</option>
                                     ))}
                                 </select>
                             </div>
@@ -143,11 +167,14 @@ class TasksPage extends React.Component {
                                     <option >All</option>
                                     {users.items && users.items.map((item) => (
                                         
-                                        <option value={item.id}>{item.email}</option>
+                                        <option value={item.id} key={item.id}>{item.email}</option>
                                     ))}
                                 </select>
                             </div>
-                            <div >Interval</div>
+                            <div style={{flexGrow:'8'}}>
+                                <a className='normal-button' style={{float:'right'}} onClick={() => this.handleSubmit()}>Apply filters</a>
+                            </div>
+                            {/* <div >Interval</div>
                             <div>
                                 <select style={{width: "50%",backgroundColor:'#f1f1f1'}} onChange={this.selectSort}>
                                     <option >All</option>
@@ -156,22 +183,27 @@ class TasksPage extends React.Component {
                                     <option data-clm='email'>Last 6 months</option>
                                     <option data-clm='email'>Last 1 year</option>
                                 </select>
-                            </div>
+                            </div> */}
                     </div>
                 </div>
-                        <div className='flex-container'>
-                            <ul className='listing' style={{width:'40%',backgroundColor:'#f1f1f1',padding:'20px'}}>
+
+                        <div>
+                        
+                            <ul className='listing' style={{width:'50%',backgroundColor:'#f1f1f1',padding:'20px'}}>
                                 {jobs.items && jobs.items.map((item) => {
-                                return <li style={{outline:'auto' ,padding:'5px',borderRadius:'0'}} key={item.id}>
+                                return <li style={{padding:'5px',borderRadius:'0'}} key={item.id}>
                                     <div>
-                                        <h4>{item.title}</h4>
-                                        <div style={{wordWrap:'break-word'}}>-{' '}{item.description}{' '}</div>
-                                        <br></br>-{item.assignerName}
-                                        <br></br>Duedate:{' '}{item.duedate}
-                                        
+                                    <h4>{item.title}</h4>
+                                    <div style={{ wordWrap: "break-word" }}>
+                                    - {item.description}{" "}
+                                    </div>
+                                    <br></br>Assigner:{' '}{item.assignerName}
+                                    <br></br>Assignee: {' '}{item.assigneeName}
+                                    <br></br>Status: {' '}{item.status}
+                                    <br></br>Duedate: {' '}{item.duedate}
                                     </div>
                                     {user.id==item.assignee ?
-                                    (<div className='flex-container' style={{padding:'4px 4px 4px 0'}}>
+                                    (<div  style={{padding:'4px 4px 4px 0'}}>
                                         Update status:{' '}
                                         <select style={{width: "35%",backgroundColor:'#f1f1f1'}} onChange={this.updateStatus}>
                                             <option >{item.status}</option>
@@ -180,113 +212,18 @@ class TasksPage extends React.Component {
                                         </select>
                                     </div>)
                                     :
-                                    (<div className='flex-container' style={{padding:'4px 4px 4px 0'}}>
+                                    (<div  style={{padding:'4px 4px 4px 0'}}>
                                     </div>)}
-                                    <div className='flex-container'>
+                                    {user.id==item.creator ?
+                                    (<div className='flex-container'>
                                         <a className='normal-button' onClick={() => this.handleEditUser(item)}>Edit</a>
                                         <a className='normal-button' onClick={() => this.handleDeleteUser(item.id)}>Delete</a>
-                                    </div>
+                                    </div>)
+                                    : null}
                                 </li>
                                 })}
                             </ul>
-                            {/* {jobs.values&&
-                            <div style={{width:'50%'}} >Highcharts
-                                <HighchartsReact
-                                highcharts={Highcharts}
-                                options={{
-            chart: {
-              // renderTo: 'container',
-              type: "variablepie",
-              margin: [0, 0, 0, 0],
-            //   marginLeft: -100,
-              events: {
-                load: function() {
-                  this.renderer
-                    .circle(
-                      this.chartWidth / 2,
-                      this.plotHeight / 2 + this.plotTop,
-                      this.plotHeight / 4
-                    )
-                    .attr({
-                      fill: "rgba(0,0,0,0)",
-                      stroke: "#2ec277",
-                      left: -100,
-                      "stroke-width": 1
-                    })
-                    .add();
-                }
-              }
-            },
-            colors: ["#2ec277", "#2db799", "#b7e886", "#6d5494", "#0077b4"],
-          
-            title: {
-              text: null
-            },
-          
-            legend: {
-              align: "right",
-              verticalAlign: "top",
-              layout: "vertical",
-              x: 60,
-              y: 100,
-              itemMarginTop: 5,
-              itemMarginBottom: 5,
-              itemStyle: {
-                font: "17pt Trebuchet MS, Verdana, sans-serif",
-                color: "#333333"
-              }
-            },
-            plotOptions: {
-              series: {
-                stacking: "normal",
-                dataLabels: {
-                  enabled: false
-                },
-                showInLegend: true,
-                size: 185
-              }
-            },
-          
-            series: [
-              {
-                minPointSize: 5,
-                innerSize: "0%",
-                zMin: 0,
-                name: "Performance",
-                data: [
-                  {
-                    name: 'Completed On Time',
-                    y: jobs.values.completedOnTime,
-                    z: 99
-                  },
-                  {
-                    name: "Completed After Deadline",
-                    y: jobs.values.completedAfterDeadline,
-                    z: 99
-                  },
-                  {
-                    name:'Overdue',
-                    y:jobs.values.overdue,
-                    z: 99
-                  },
-                  {
-                    name:'inprogress',
-                    y:jobs.values.inprogress,
-                    z: 99
-                  },
-                  {
-                    name:'No Activity',
-                    y:jobs.values.noactivity,
-                    z: 99
-                  },
-                ]
-              }
-            ]
-          }}
-                                ref="chartComponent1"
-                                />
-                            </div>
-                            } */}
+                            
                         </div>
                         
                 </div>
@@ -304,7 +241,7 @@ function mapState(state) {
 const actionCreators = {
     getjobs:userActions.getjobs,
     deletejob:userActions.deletejob,
-    filterTD: userActions.filterbytd,
+    filtertasks: userActions.filtertasks,
     filterbystatus: userActions.filterbystatus,
     getUsers: userActions.getAll,
     filterbyassignee: userActions.filterbyassignee,

@@ -12,31 +12,31 @@ import HighchartsReact from "highcharts-react-official";
 
 variablePie(Highcharts);
 
-class TaskOverviewPage extends React.Component {
+class UserPage extends React.Component {
     componentDidMount() {
         this.props.getUsers();
         this.props.getjobs();
-        // let overviewId = JSON.parse(localStorage.getItem('overviewId'));
-        this.props.getValues();
-        this.props.getValuesByMonth();
+        let overviewId = JSON.parse(localStorage.getItem('overviewId'));
+        this.props.getValues(overviewId);
+        this.props.getValuesByMonth(overviewId);
         // localStorage.removeItem('overviewId');
     }
     render() {
         const { jobs, users } = this.props;
         const { user } = this.props;
         return (
-        <div>
+        <div style={{width:'100%',height:'100%'}}>
             <div className="top-header"></div>
             <div>
             <ul className="navbar0">
                 <li>
-                <a href="/">Users</a>
+                <a className="active" href="/">Home</a>
                 </li>
                 <li>
                 <a href="/dashboard">Dashboard</a>
                 </li>
                 <li>
-                <a className="active" href="/tasks">
+                <a  href="/tasks">
                     Tasks
                 </a>
                 </li>
@@ -44,24 +44,11 @@ class TaskOverviewPage extends React.Component {
             </div>
 
             <div className="big-container" style={{ marginLeft: "20%" }}>
-                <ul className="flex-container" style={{ listStyleType: "none" }}>
-                    <li>
-                    <a  href="/tasks">
-                        List
-                    </a>
-                    </li>
-                    <li>
-                    <a   className="active" href="/overview">Overview</a>
-                    </li>
-                    <li>
-                    <a href="/tasks">Archived</a>
-                    </li>
-                </ul>
+                
 
-                <h2>Tasks</h2>
                 <div >
                     {jobs.values && (
-                    <div style={{ width: "auto" }}>
+                    <div >
                         Performance
                         <HighchartsReact
                         highcharts={Highcharts}
@@ -167,8 +154,8 @@ class TaskOverviewPage extends React.Component {
                     </div>
                     )}
                     {jobs.monthlyValues && (
-                    <div style={{ width: "auto" }}>
-                        Performance
+                    <div >
+                        
                         <HighchartsReact
                         highcharts={Highcharts}
                         options={{
@@ -271,5 +258,5 @@ const actionCreators = {
   getValues: userActions.getvalues,
   getValuesByMonth: userActions.getvaluesbymonth,
 };
-const connectedPage = connect(mapState, actionCreators)(TaskOverviewPage);
-export { connectedPage as TaskOverviewPage };
+const connectedPage = connect(mapState, actionCreators)(UserPage);
+export { connectedPage as UserPage };

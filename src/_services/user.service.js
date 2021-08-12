@@ -17,7 +17,7 @@ export const userService = {
     filterbyrole,
     getjobs,
     deletejob,
-    filterbytd,
+    filtertasks,
     filterbystatus,
     filterbyassigner,
     filterbyassignee,
@@ -25,6 +25,9 @@ export const userService = {
     getvalues,
     updatestatus,
     getvaluesbymonth,
+    getuser,
+    verifyuser,
+    deleteself,
     
 };
 
@@ -56,6 +59,15 @@ function register(user) {
     };
 
     return fetch('http://localhost:8050/api/register', requestOptions).then(handleResponse);
+}
+function verifyuser(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch('http://localhost:8050/api/emailVerify', requestOptions).then(handleResponse);
 }
 function resetpassword(user) {
     const requestOptions = {
@@ -106,6 +118,14 @@ function getvaluesbymonth(id) {
     };
 
     return fetch('http://localhost:8050/api/getMonthlyValues?id='+id, requestOptions).then(handleResponse);
+}
+function getuser() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('http://localhost:8050/api/getUser', requestOptions).then(handleResponse);
 }
 function filterbyid(id) {
     const requestOptions = {
@@ -165,6 +185,15 @@ function _delete(id) {
 
     return fetch('http://localhost:8050/api/delUser?id='+id, requestOptions).then(handleResponse);
 }
+function deleteself() {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+    // console.log('00000')
+
+    return fetch('http://localhost:8050/api/delSelf', requestOptions).then(handleResponse);
+}
 function deletejob(id) {
     const requestOptions = {
         method: 'DELETE',
@@ -174,13 +203,13 @@ function deletejob(id) {
 
     return fetch('http://localhost:8050/api/deleteJob?id='+id, requestOptions).then(handleResponse);
 }
-function filterbytd(name) {
+function filtertasks(filter) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch('http://localhost:8050/api/filterJobs?column=title&string='+name, requestOptions).then(handleResponse);
+    return fetch('http://localhost:8050/api/filterJobs'+'?search='+filter.string+'&status='+filter.status+'&assignee='+filter.assignee+'&creator='+filter.assigner, requestOptions).then(handleResponse);
 }
 function filterbystatus(name) {
     const requestOptions = {
@@ -226,13 +255,7 @@ function createuser(user) {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
-    return axios.post('http://localhost:8050/api/createUser',postData,config)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    return axios.post('http://localhost:8050/api/createUser',postData,config);
       
 }
 function createtask(user) {

@@ -38,6 +38,23 @@ export function users(state = {}, action) {
 				...state,
 				error: action.error,
 			};
+
+		case userConstants.GETUSER_REQUEST:
+			return {
+				...state,
+				loading: true,
+			};
+		case userConstants.GETUSER_SUCCESS:
+			return {
+				...state,
+				user: action.user,
+			};
+		case userConstants.GETUSER_FAILURE:
+			return {
+				...state,
+				error: action.error,
+			};
+
 		case userConstants.DELETE_REQUEST:
 			// add 'deleting:true' property to user being deleted
 			// console.log(action.id);
