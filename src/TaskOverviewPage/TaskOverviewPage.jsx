@@ -14,6 +14,7 @@ variablePie(Highcharts);
 
 class TaskOverviewPage extends React.Component {
     componentDidMount() {
+        this.props.alertclear();
         this.props.getUsers();
         this.props.getjobs();
         // let overviewId = JSON.parse(localStorage.getItem('overviewId'));
@@ -26,7 +27,12 @@ class TaskOverviewPage extends React.Component {
         const { user } = this.props;
         return (
         <div>
-            <div className="top-header"></div>
+            <div className="top-header" ><button
+					style={{float:'right',color:'white',marginRight:'100px',textDecoration:'none'}}
+					onClick={() => this.props.logout()}
+					class="btn btn-link"
+					>Logout
+				</button></div>
             <div>
             <ul className="navbar0">
                 <li>
@@ -44,7 +50,7 @@ class TaskOverviewPage extends React.Component {
             </div>
 
             <div className="big-container" style={{ marginLeft: "20%" }}>
-                <ul className="flex-container" style={{ listStyleType: "none" }}>
+                <ul className="flex-container" style={{ listStyleType: "none",position:'relative',top:'40px',position:'fixed', zIndex: "10",width:'100%'  }}>
                     <li>
                     <a  href="/tasks">
                         List
@@ -58,19 +64,21 @@ class TaskOverviewPage extends React.Component {
                     </li>
                 </ul>
 
-                <h2>Tasks</h2>
-                <div >
+                <h2 style={{ position:'relative',top:'80px',position:'fixed', zIndex: "10",backgroundColor:"white",width:'100%'  }}>Tasks</h2>
+                <div style={{ position:'relative',top:'120px'}}>
+                {jobs.loading && <em>Loading Charts...</em>}
+                        {jobs.error && <span className="text-danger">ERROR: {jobs.error}</span>}
                     {jobs.values && (
-                    <div style={{ width: "auto" }}>
+                    <div style={{ }}>
                         Performance
                         <HighchartsReact
                         highcharts={Highcharts}
                         options={{
+	                        maintainAspectRatio: false,
                             chart: {
                             // renderTo: 'container',
                             type: "variablepie",
                             margin: [0, 0, 0, 0],
-                            //   marginLeft: -100,
                             events: {
                                 load: function () {
                                 this.renderer
@@ -90,17 +98,17 @@ class TaskOverviewPage extends React.Component {
                             },
                             },
                             colors: [
-                            "#228B22",
+                            "#39DF39",
                             "#FF8C00",
                             "#FF0000",
-                            "#00FF7F",
+                            "#BEFDBE",
                             "#808080",
                             ],
 
                             title: {
                             text: null,
                             },
-
+                            height:'30px',
                             legend: {
                             align: "right",
                             verticalAlign: "top",
@@ -122,7 +130,7 @@ class TaskOverviewPage extends React.Component {
                                 },
                                 showInLegend: true,
                                 size: 200,
-                                // marginLeft: 5,
+                                marginLeft: 50,
                             },
                             },
 
@@ -163,18 +171,30 @@ class TaskOverviewPage extends React.Component {
                             ],
                         }}
                         ref="chartComponent1"
+                    
                         />
                     </div>
                     )}
                     {jobs.monthlyValues && (
                     <div style={{ width: "auto" }}>
-                        Performance
+                        
                         <HighchartsReact
                         highcharts={Highcharts}
                         options={{
                             chart: {
                             type: "column",
                             },
+                            scales: {
+                                yAxes: [
+                                    {
+                                    ticks: {
+                                        precision: 0,
+                                        beginAtZero: true,
+                                    },
+                                    },
+                                ],
+                            },
+
                             xAxis: {
                                 categories: [
                                     'Jan',
@@ -192,14 +212,8 @@ class TaskOverviewPage extends React.Component {
                                 ],
                                 // crosshair: true
                             },
-                            yAxis: {
-                                min: 0,
-                                title: {
-                                    text:null
-                                }
-                            },
                             colors: [
-                            "#228B22",
+                            "#39DF39",
                             "#FF8C00",
                             "#FF0000",
                             "#00FF7F",
@@ -217,12 +231,6 @@ class TaskOverviewPage extends React.Component {
                                 // shared: true,
                                 // useHTML: true
                             },
-                            plotOptions: {
-                                column: {
-                                    pointPadding: 0.2,
-                                    borderWidth: 0
-                                }
-                            },
                             series: [{
                                     name: "Completed On Time",
                                     data: jobs.monthlyValues.completedOnTime
@@ -237,14 +245,11 @@ class TaskOverviewPage extends React.Component {
                                 }
                             ],
                         }}
-                        ref="chartComponent2"
                         />
                     </div>
                     )}
                     
                 </div>
-                {/* {<div id="container">
-  	            </div>} */}
             </div>
             
             
@@ -270,6 +275,8 @@ const actionCreators = {
   dispatchId: userActions.editrequest,
   getValues: userActions.getvalues,
   getValuesByMonth: userActions.getvaluesbymonth,
+  alertclear: userActions.alertclear,
+  logout: userActions.logout,
 };
 const connectedPage = connect(mapState, actionCreators)(TaskOverviewPage);
 export { connectedPage as TaskOverviewPage };

@@ -14,7 +14,8 @@ class EditTaskPage extends React.Component {
                 title:copy.title,
                 description:copy.description,
                 duedate:copy.duedate,
-                assignee:'',
+                assignee:copy.assignee,
+                id:copy.id,
             },
             submitted: false
         };
@@ -56,7 +57,7 @@ class EditTaskPage extends React.Component {
         const { user } = this.state;
         if (user.title&&user.description&&user.duedate) {
             // console.log(user);
-            // this.props.createTask(user);//call api
+            this.props.editTask(user);//call api
         }
     }
     selectAssignee(e){
@@ -89,14 +90,14 @@ class EditTaskPage extends React.Component {
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.description ? ' has-error' : '')}>
-                        <label htmlFor="text">Description</label>
+                        <label htmlFor="text">Description</label><br></br>
                         <input type="description"  name="description" value={user.description}onChange={this.handleChange} />
                         {submitted && !user.description &&
                             <div className="help-block">Description is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.duedate ? ' has-error' : '')}>
-                        <label htmlFor="text">Duedate(Y-m-d H:i:s)<br></br></label><br></br>
+                        <label htmlFor="text">Duedate(Y-m-d H:i:s)</label><br></br>
                         <input type="text"  name="duedate" value={user.duedate} onChange={this.handleChange} />
                         {submitted && !user.duedate &&
                             <div className="help-block">duedate is required</div>
@@ -107,7 +108,7 @@ class EditTaskPage extends React.Component {
                                 <option >{copy.assigneeName}</option>
                                 {users.items && users.items.map((item) => (
                                     
-                                    <option value={item.id}>{item.email}</option>
+                                    <option value={item.id} key = {item.id}>{item.email} </option>
                                 ))}
                             </select>
                     </div>
@@ -133,6 +134,7 @@ const actionCreators = {
     getTasks: userActions.getjobs,
     createTask: userActions.createtask,
     getUsers: userActions.getAll,
+    editTask: userActions.edittask,
 }
 const connectedPage = connect(mapState, actionCreators)(EditTaskPage);
 export { connectedPage as EditTaskPage };

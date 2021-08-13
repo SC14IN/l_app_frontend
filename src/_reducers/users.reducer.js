@@ -30,7 +30,7 @@ export function users(state = {}, action) {
 			};
 		case userConstants.GETALL_SUCCESS:
 			return {
-				...state,
+				...state,loading:false,
 				items: action.users,
 			};
 		case userConstants.GETALL_FAILURE:
@@ -47,7 +47,7 @@ export function users(state = {}, action) {
 		case userConstants.GETUSER_SUCCESS:
 			return {
 				...state,
-				user: action.user,
+				user: action.user,loading:false,
 			};
 		case userConstants.GETUSER_FAILURE:
 			return {
@@ -128,7 +128,7 @@ export function users(state = {}, action) {
 			};
 		case userConstants.FILTERBYNAME_SUCCESS:
 			return {
-				...state,
+				...state,loading:false,
 				items: action.users,
 			};
 		case userConstants.FILTERBYNAME_FAILURE:

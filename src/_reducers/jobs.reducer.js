@@ -10,6 +10,7 @@ export function jobs(state = {}, action) {
         case userConstants.GETJOBS_SUCCESS:
         return {
             ...state,
+            loading:false,
             items: action.jobs,
         };
         case userConstants.GETJOBS_FAILURE:
@@ -40,7 +41,7 @@ export function jobs(state = {}, action) {
         };
         case userConstants.FILTERBYTD_SUCCESS:
         return {
-            ...state,
+            ...state,loading:false,
             items: action.jobs,
         };
         case userConstants.FILTERBYTD_FAILURE:
@@ -104,7 +105,7 @@ export function jobs(state = {}, action) {
         };
         case userConstants.GETVALUES_SUCCESS:
         return {
-            ...state,
+            ...state,loading:false,
             values: action.values,
         };
         case userConstants.GETVALUES_FAILURE:
@@ -120,7 +121,7 @@ export function jobs(state = {}, action) {
         };
         case userConstants.GETVALUESM_SUCCESS:
         return {
-            ...state,
+            ...state,loading:false,
             monthlyValues: action.valuesM,
         };
         case userConstants.GETVALUESM_FAILURE:

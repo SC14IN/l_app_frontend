@@ -14,6 +14,7 @@ variablePie(Highcharts);
 
 class UserPage extends React.Component {
     componentDidMount() {
+        this.props.alertclear();
         this.props.getUsers();
         this.props.getjobs();
         let overviewId = JSON.parse(localStorage.getItem('overviewId'));
@@ -26,7 +27,12 @@ class UserPage extends React.Component {
         const { user } = this.props;
         return (
         <div style={{width:'100%',height:'100%'}}>
-            <div className="top-header"></div>
+            <div className="top-header"><button
+					style={{float:'right',color:'white',marginRight:'100px',textDecoration:'none'}}
+					onClick={() => this.props.logout()}
+					class="btn btn-link"
+					>Logout
+				</button></div>
             <div>
             <ul className="navbar0">
                 <li>
@@ -46,7 +52,9 @@ class UserPage extends React.Component {
             <div className="big-container" style={{ marginLeft: "20%" }}>
                 
 
-                <div >
+                <div style={{ position:'relative',top:'40px'}}>
+                {jobs.loading && <em>Loading Charts...</em>}
+                        {jobs.error && <span className="text-danger">ERROR: {jobs.error}</span>}
                     {jobs.values && (
                     <div >
                         Performance
@@ -257,6 +265,8 @@ const actionCreators = {
   dispatchId: userActions.editrequest,
   getValues: userActions.getvalues,
   getValuesByMonth: userActions.getvaluesbymonth,
+  alertclear: userActions.alertclear,
+  logout: userActions.logout,
 };
 const connectedPage = connect(mapState, actionCreators)(UserPage);
 export { connectedPage as UserPage };

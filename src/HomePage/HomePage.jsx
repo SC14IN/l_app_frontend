@@ -9,6 +9,7 @@ import SideNav from "./Sidebar";
 
 class HomePage extends React.Component {
 	componentDidMount() {
+		this.props.alertclear();
 		this.props.getAll();
 		this.props.getUser();
 	}
@@ -55,8 +56,13 @@ class HomePage extends React.Component {
 		<div>
 			<div
 			className="top-header"
-			style={{ position: "fixed", width: "100%", zIndex: "1000" }}
-			></div>
+			style={{ position:'relative',top:'0',position: "fixed", width: "100%", zIndex: "1000" }}
+			><button
+					style={{float:'right',color:'white',marginRight:'100px',textDecoration:'none'}}
+					onClick={() => this.props.logout()}
+					class="btn btn-link"
+					>Logout
+				</button></div>
 			{/* <SideNav name = 'sidenav'/> */}
 			<ul className="navbar0">
 			<li>
@@ -74,23 +80,25 @@ class HomePage extends React.Component {
 			<section className="section" style={{ marginLeft: "20%" }}>
 			<div
 				style={{
-				width: "100%",
+				width: "60%",
 				position: "relative",
 				top: "40px",
 				position: "fixed",
 				zIndex: "1",
 				backgroundColor: "white",
+				height:'40px'
 				}}
 			>
 				User Managemant
+				
 			</div>
 			<div
 				className="flex-container"
 				style={{
 				position: "relative",
-				top: "65px",
+				top: "70px",
 				position: "fixed",
-				width: "70%",
+				width: "60%",
 				zIndex: "1",
 				}}
 			>
@@ -115,11 +123,13 @@ class HomePage extends React.Component {
 				<Link to={'/createUser'} className="btn btn-sm btn-success mb-2" style={{float:'right'}}>Add User</Link>
 				</div>
 			</div>
-			<div style={{ position: "relative", top: "140px" }}>
+			<div style={{ position: "relative", top: "140px",width:'60%'}}>
+			
 				<ul
 				className="users-listing"
 				style={{ fontSize: "20px", zIndex: "-1" }}
-				>
+				>{users.loading && <em>Loading Users...</em>}
+                        {users.error && <span className="text-danger">ERROR: {users.error}</span>}
 				{users.items &&
 					users.items.map((user) => (
 					<div className='flex-container' key={user.id}>
@@ -161,9 +171,9 @@ class HomePage extends React.Component {
 					))}
 				</ul>
 			</div>
-			<div style={{ position: "relative", top: "150px" }}>
+			{/* <div style={{ position: "relative", top: "150px" }}>
 				<Link to="/login">Logout</Link>
-			</div>
+			</div> */}
 			</section>
 		</div>
 		);
@@ -187,6 +197,8 @@ const actionCreators = {
 	filterbyemail: userActions.filterbyemail,
 	sortbyname: userActions.sortbyname,
 	sortbyemail: userActions.sortbyemail,
+	alertclear: userActions.alertclear,
+	logout: userActions.logout,
 };
 
 const connectedHomePage = connect(mapState, actionCreators)(HomePage);

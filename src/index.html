@@ -3,6 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <title>L_APP</title>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+      Pusher.logToConsole = true;
+
+    var pusher = new Pusher('8807ac588a7067358747', {
+      cluster: 'ap2'
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      alert(JSON.stringify(data));
+    });
+    </script>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" /> -->
     <style>
       a {
@@ -25,7 +38,7 @@
         background-color: #f1f1f1;
         position: relative;
         position: fixed;
-        top:40px;
+        top: 40px;
         height: 100%;
         overflow: auto;
       }
@@ -112,7 +125,7 @@
         display: flex;
         background-color: #f1f1f1;
         width: auto;
-        margin-right: 10%;
+        /* margin-right: 10%; */
       }
       .flex-container-fixed {
         /* display: flex; */
@@ -152,7 +165,16 @@
       /* div.big-container{
         margin-top: 40px;
       } */
-      
+      div.top-header {
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+      }
+      #close {
+        float:right;
+        padding:2px 5px;
+        background:#ccc;
+    }
     </style>
   </head>
   <body>

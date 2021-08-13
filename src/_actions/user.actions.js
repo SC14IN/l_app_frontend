@@ -2,6 +2,7 @@ import { alertConstants, userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from './';
 import { history } from '../_helpers';
+import { toast } from 'react-toastify';
 //check error 
 export const userActions = {
     login,
@@ -33,6 +34,8 @@ export const userActions = {
     verifyuser,
     deleteself,
     filtertasks,
+    edittask,
+    alertclear,
 
 };
 
@@ -48,7 +51,17 @@ function login(email, password) {
                     history.push('/');
                 },
                 error => {
+
                     dispatch(failure(error.toString()));
+                    toast.error(error.toString(), {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                     dispatch(alertActions.error(error.toString()));
                 }
             );
@@ -60,6 +73,7 @@ function login(email, password) {
 }
 function logout() {
     userService.logout();
+    history.push('/login');
     return { type: userConstants.LOGOUT };
 }
 function register(user) {
@@ -70,7 +84,16 @@ function register(user) {
                 user => { 
                     dispatch(success());
                     history.push('/verify');
-                    dispatch(alertActions.success('Registration successful'));
+                    toast.success('Registration successful', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
+                    // dispatch(alertActions.success('Registration successful'));
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -91,7 +114,15 @@ function verifyuser(user) {
                 user => { 
                     dispatch(success());
                     history.push('/login');
-                    dispatch(alertActions.success('Verification successful'));
+                    toast.success('Verification successful', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -112,8 +143,16 @@ function forgotpassword(user) {
             .then(
                 user => { 
                     dispatch(success());
-                    history.push('/resetpassword');//reset password
-                    dispatch(alertActions.success('Token sent to email'));
+                    history.push('/resetpassword');
+                    toast.success('Token sent to mail', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -153,7 +192,15 @@ function resetpassword(user) {
                 user => { 
                     dispatch(success());
                     history.push('/login');
-                    dispatch(alertActions.success('Reset successful'));
+                    toast.success('Reset password successful', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -188,7 +235,15 @@ function _delete(id) {
             .then(
                 user => { 
                     dispatch(success(id));
-                    // location.reload();
+                    toast.warn('User deleted', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 },
                 error => dispatch(failure(id, error.toString()))
             );
@@ -206,8 +261,17 @@ function createuser(user) {
             .then(
                 user => { 
                     dispatch(success(user));
-                    history.push('/resetpassword');
+                    history.push('/');
                     // dispatch(alertActions.success('Token sent to email'));
+                    toast.success('User created!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 },
                 error => {
                     // console.log(error);
@@ -299,6 +363,15 @@ function deletejob(id) {
             .then(
                 user => { 
                     dispatch(success(id));
+                    toast.warn('Task deleted', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 },
                 
             ).catch(
@@ -406,7 +479,15 @@ function createtask(user) {
                 user => { 
                     dispatch(success());
                     history.push('/tasks');
-                    dispatch(alertActions.success('Task created!'));
+                    toast.success('Task created!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -418,6 +499,28 @@ function createtask(user) {
     function request(user) { return { type: userConstants.CREATETASK_REQUEST, user } }
     function success(user) { return { type: userConstants.CREATETASK_SUCCESS } }
     function failure(error) { return { type: userConstants.CREATETASK_FAILURE, error } }
+}
+function edittask(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.edittask(user)
+            .then(
+                user => { 
+                    dispatch(success());
+                    history.push('/tasks');
+                    dispatch(alertActions.success('Task updated!'));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.EDITTASK_REQUEST, user } }
+    function success() { return { type: userConstants.EDITTASK_SUCCESS } }
+    function failure(error) { return { type: userConstants.EDITTASK_FAILURE, error } }
 }
 function editrequest(job) {
     return dispatch => {
@@ -495,4 +598,11 @@ function getuser() {
     function request() { return { type: userConstants.GETUSER_REQUEST } }
     function success(user) { return { type: userConstants.GETUSER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.GETUSER_FAILURE, error } }
+}
+function alertclear() {
+    return dispatch => {
+        dispatch(request());
+    };
+    function request() { return { type: alertConstants.CLEAR } }
+    
 }

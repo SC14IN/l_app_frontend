@@ -1,16 +1,17 @@
 import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+  
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
-import { PrivateRoute } from '../_components';
+import { PrivateRoute,GuestRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
 import { RegisterPage } from '../RegisterPage';
 import { ForgotPasswordPage } from '../ForgotPasswordPage';
 import { ResetPasswordPage } from '../ResetPasswordPage';
-
 import { CreateUserPage } from '../CreateUserPage';
 import { DashboardPage } from '../DashboardPage';
 import { TasksPage } from '../TasksPage';
@@ -19,40 +20,42 @@ import {EditTaskPage} from '../EditTaskPage';
 import {TaskOverviewPage} from '../TaskOverviewPage';
 import { UserPage } from '../UserPage';
 import { VerifyPage } from '../VerifyPage';
-
-// import {TestPage} from '../TestPage';
-// import './styles.scss';
+import './styles.scss';
 class App extends React.Component {
-    // constructor(props) {
-    //     super(props);
-
-    //     history.listen((location, action) => {
-    //         // clear alert on location change
-    //         this.props.clearAlerts();
-    //     });
-    // }
-
+    
     render() {
         const { alert } = this.props;
+        const notify = () => toast("Wow so easy!");
+
         return (
             <div className="jumbotron">
                 <div className="container">
-                    <div >
-                        {alert.message &&
-                            <div className={`alert ${alert.type}`}>{alert.message}</div>
-                        }
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        />
+                        <ToastContainer />
+                    
+                    
                         <Router history={history}>
                             <Switch>
                                 {/* guest route to login which allows to login page when not logged in  */}
-                                <Route path="/login" component={LoginPage} />
-                                <Route path="/register" component={RegisterPage} />
-                                <Route path="/verify" component={VerifyPage} />
-                                <Route path="/forgotpassword" component={ForgotPasswordPage} />
-                                <Route path="/resetpassword" component={ResetPasswordPage} />
+                                <GuestRoute path="/login" component={LoginPage} />
+                                <GuestRoute path="/register" component={RegisterPage} />
+                                <GuestRoute path="/verify" component={VerifyPage} />
+                                <GuestRoute path="/forgotpassword" component={ForgotPasswordPage} />
+                                <GuestRoute path="/resetpassword" component={ResetPasswordPage} />
                                 <PrivateRoute exact path="/" component={HomePage} />
                                 <PrivateRoute exact path="/createUser" component={CreateUserPage} />
                                 <PrivateRoute exact path="/dashboard" component={DashboardPage} />
-                                <PrivateRoute exact path="/tasks" component={TasksPage} />
+                                <PrivateRoute  path="/tasks" component={TasksPage} />
                                 <PrivateRoute exact path="/createTask" component={CreateTaskPage} />
                                 <PrivateRoute exact path="/editTask" component={EditTaskPage} />
                                 <PrivateRoute exact path="/overview" component={TaskOverviewPage} />
@@ -62,7 +65,6 @@ class App extends React.Component {
                                 {/* <Route path="/test" component={TestPage} /> */}
                             </Switch>
                         </Router>
-                    </div>
                  </div>
              </div>
         );
