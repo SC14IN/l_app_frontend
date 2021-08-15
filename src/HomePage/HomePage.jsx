@@ -45,9 +45,9 @@ class HomePage extends React.Component {
 		this.props.sortbyemail("desc");
 		}
 	};
-	userOverview(overviewId) {
-		localStorage.setItem("overviewId", JSON.stringify(overviewId));
-		history.push("/performance");
+	userOverview(overviewId,name,email) {
+		// localStorage.setItem("overviewId", JSON.stringify(overviewId));
+		history.push("/performance?id="+overviewId+"&name="+name+"&email="+email);
 	}
 	render() {
 		const { users } = this.props;
@@ -120,7 +120,7 @@ class HomePage extends React.Component {
 				</select>
 				</div>
 				<div style={{flexGrow:'5'}}>
-				<Link to={'/createUser'} className="btn btn-sm btn-success mb-2" style={{float:'right'}}>Add User</Link>
+				{users.user && users.user.role=='admin'?<Link to={'/createUser'} className="btn btn-sm btn-success mb-2" style={{float:'right'}}>Add User</Link> : null}
 				</div>
 			</div>
 			<div style={{ position: "relative", top: "140px",width:'60%'}}>
@@ -129,7 +129,7 @@ class HomePage extends React.Component {
 				className="users-listing"
 				style={{ fontSize: "20px", zIndex: "-1" }}
 				>{users.loading && <em>Loading Users...</em>}
-                        {users.error && <span className="text-danger">ERROR: {users.error}</span>}
+                        {/* {users.error && <span className="text-danger">ERROR: {users.error}</span>} */}
 				{users.items &&
 					users.items.map((user) => (
 					<div className='flex-container' key={user.id}>
@@ -139,7 +139,7 @@ class HomePage extends React.Component {
 							(<a
 							className="link-button"
 							style={{ textDecoration: "none" }}
-							onClick={() => this.userOverview(user.id)}
+							onClick={() => this.userOverview(user.id,user.name,user.email)}
 							>
 							{user.name}
 							</a>)

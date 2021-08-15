@@ -1,4 +1,6 @@
 import { authHeader } from "../_helpers";
+import { userActions } from "../_actions";
+import { toast } from 'react-toastify';
 
 export const userService = {
 	login,
@@ -103,9 +105,8 @@ function getAll() {
 		headers: authHeader(),
 	};
 
-	return fetch("http://localhost:8050/api/listUsers", requestOptions).then(
-		handleResponse
-	);
+	return fetch("http://localhost:8050/api/listUsers", requestOptions)
+		.then( handleResponse);
 }
 function getjobs() {
 	const requestOptions = {
@@ -353,17 +354,29 @@ function updatestatus(status, id) {
 	);
 }
 function handleResponse(response) {
+	if (response.status == 401) {
+		toast.error('Session expired, Login again', {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			});
+		userActions.logout();
+		return ;
+	}
 	return response.text().then((text) => {
 		const data = text && JSON.parse(text);
+		// console.log('in handle response')
 		if (!response.ok) {
 			if (response.status == 401) {
-				logout();
+				userActions.logout();
 			}
-
 			const error = (data && data.message) || response.statusText;
 			return Promise.reject(error);
 		}
-
 		return data;
 	});
 }

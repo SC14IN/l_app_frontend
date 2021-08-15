@@ -290,13 +290,25 @@ class TasksPage extends React.Component {
 									{users.items &&
 										users.items.map((item) => (
 											
-                                            <option
-												value={item.id}
-												key={item.id}
-											>
-												{(item.id==user.id && (!id)) ? 'Me' : item.email}
+                                            
+												(item.id==user.id)
+													?(
+														id
+														?null
+														:(<option
+															value={item.id}
+															key={item.id}
+														>Me
+														</option>)
+													)
+													:(<option
+															value={item.id}
+															key={item.id}
+														>{item.email}
+													</option>)
+												
 
-											</option>
+											
 										))}
 									
 								</select>
@@ -335,11 +347,11 @@ class TasksPage extends React.Component {
 							}}
 						>
 							{jobs.loading && <em>Loading Tasks...</em>}
-							{jobs.error && (
+							{/* {jobs.error && (
 								<span className="text-danger">
 									ERROR: {jobs.error}
 								</span>
-							)}
+							)} */}
 							{jobs.items &&
 								jobs.items.map((item) => {
 									return (

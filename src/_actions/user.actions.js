@@ -98,6 +98,15 @@ function register(user) {
                 error => {
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
+                    toast.error(error.toString(), {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 }
             );
     };
@@ -127,13 +136,22 @@ function verifyuser(user) {
                 error => {
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
+                    toast.error(error.toString(), {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 }
             );
     };
 
-    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
-    function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
-    function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
+    function request(user) { return { type: userConstants.VERIFY_REQUEST, user } }
+    function success(user) { return { type: userConstants.VERIFY_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.VERIFY_FAILURE, error } }
 }
 function forgotpassword(user) {
     return dispatch => {
@@ -175,7 +193,16 @@ function deleteself() {
                     dispatch(success());
                     history.push('/login');
                 },
-                error => dispatch(failure( error.toString()))
+                error =>{ dispatch(failure( error.toString()));
+                toast.error(error.toString(), {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });}
             );
     };
 
@@ -205,6 +232,15 @@ function resetpassword(user) {
                 error => {
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
+                    toast.error(error.toString(), {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 }
             );
     };
@@ -219,7 +255,8 @@ function getAll() {
         userService.getAll()
             .then(
                 users => dispatch(success(users)),
-                error => dispatch(failure(error.toString()))
+                error => {dispatch(failure(error.toString()));
+                    }
             );
     };
 
@@ -245,7 +282,8 @@ function _delete(id) {
                         progress: undefined,
                         });
                 },
-                error => dispatch(failure(id, error.toString()))
+                error => {dispatch(failure(id, error.toString()));
+                    }
             );
     };
 
@@ -273,10 +311,21 @@ function createuser(user) {
                         progress: undefined,
                         });
                 },
+                
+            ).catch(
                 error => {
                     // console.log(error);
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
+                    toast.error(error.toString(), {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
                 }
             );
     };

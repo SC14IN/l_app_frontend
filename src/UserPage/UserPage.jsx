@@ -9,6 +9,7 @@ import { userActions } from "../_actions";
 import Highcharts from "highcharts/highstock";
 import variablePie from "highcharts/modules/variable-pie.js";
 import HighchartsReact from "highcharts-react-official";
+var qs = require("qs");
 
 variablePie(Highcharts);
 
@@ -17,7 +18,9 @@ class UserPage extends React.Component {
         this.props.alertclear();
         this.props.getUsers();
         this.props.getjobs();
-        let overviewId = JSON.parse(localStorage.getItem('overviewId'));
+        const overviewId = qs.parse(this.props.location.search, {
+            ignoreQueryPrefix: true,
+        }).id;
         this.props.getValues(overviewId);
         this.props.getValuesByMonth(overviewId);
         // localStorage.removeItem('overviewId');
@@ -50,9 +53,15 @@ class UserPage extends React.Component {
             </div>
 
             <div className="big-container" style={{ marginLeft: "20%" }}>
-                
-
                 <div style={{ position:'relative',top:'40px'}}>
+                    <div><h2>{qs.parse(this.props.location.search, {
+                        ignoreQueryPrefix: true,
+                        }).name}</h2>
+                        <h5>{qs.parse(this.props.location.search, {
+                        ignoreQueryPrefix: true,
+                        }).email}</h5>
+                    </div>
+                    
                 {jobs.loading && <em>Loading Charts...</em>}
                         {jobs.error && <span className="text-danger">ERROR: {jobs.error}</span>}
                     {jobs.values && (

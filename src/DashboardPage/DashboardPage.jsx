@@ -103,11 +103,11 @@ class DashboardPage extends React.Component {
 							}}
 						>
 							{jobs.loading && <em>Loading...</em>}
-							{jobs.error && (
+							{/* {jobs.error && (
 								<span className="text-danger">
 									ERROR: {jobs.error}
 								</span>
-							)}
+							)} */}
 							{jobs.items &&
 								//jobs.items.slice(1,3) &&
 								jobs.items.map((item, id) => {

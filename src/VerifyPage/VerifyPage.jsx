@@ -42,6 +42,7 @@ class VerifyPage extends React.Component {
     render() {
         const { verifying  } = this.props;
         const { user, submitted } = this.state;
+        console.log(verifying);
         return (
             <div className='formdiv'>
                 <h2>Verify</h2>
@@ -72,7 +73,7 @@ class VerifyPage extends React.Component {
 }
 
 function mapState(state) {//
-    const { verifying } = state.verify;
+    const { verifying } = state;
     return { verifying };
 }
 
