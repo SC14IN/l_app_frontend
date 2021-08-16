@@ -317,7 +317,7 @@ function createuser(user) {
                     // console.log(error);
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
-                    toast.error(error.toString(), {
+                    toast.error('Email already exists', {
                         position: "top-right",
                         autoClose: 5000,
                         hideProgressBar: false,

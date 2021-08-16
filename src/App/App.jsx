@@ -56,7 +56,7 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/createUser" component={CreateUserPage} />
                                 <PrivateRoute exact path="/dashboard" component={DashboardPage} />
                                 <PrivateRoute  path="/tasks" component={TasksPage} />
-                                <PrivateRoute exact path="/createTask" component={CreateTaskPage} />
+                                <PrivateRoute  path="/createTask" component={CreateTaskPage} />
                                 <PrivateRoute exact path="/editTask" component={EditTaskPage} />
                                 <PrivateRoute exact path="/overview" component={TaskOverviewPage} />
                                 <PrivateRoute  path="/performance" component={UserPage} />

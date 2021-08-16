@@ -2,12 +2,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
-
+import {InputGroup,FormControl} from "react-bootstrap";
 import { userActions } from "../_actions";
 // import './HomePage.html';
 import SideNav from "./Sidebar";
 
 class HomePage extends React.Component {
+	// constructor(props) {
+	// 	super(props);
+
+	// 	this.state = {
+	// 		filter: {
+	// 			string: "",
+	// 			status: qs.parse(this.props.location.search, {
+	// 				ignoreQueryPrefix: true,
+	// 			}).status,
+	// 			assigner: "",
+	// 			assignee: qs.parse(this.props.location.search, {
+	// 				ignoreQueryPrefix: true,
+	// 			}).id,
+	// 		},
+	// 	};
+	// 	this.handleSubmit = this.handleSubmit.bind(this);
+	// 	this.selectAssignee = this.selectAssignee.bind(this);
+	// 	this.selectAssigner = this.selectAssigner.bind(this);
+	// 	this.selectStatus = this.selectStatus.bind(this);
+	// }
 	componentDidMount() {
 		this.props.alertclear();
 		this.props.getAll();
@@ -60,7 +80,7 @@ class HomePage extends React.Component {
 			><button
 					style={{float:'right',color:'white',marginRight:'100px',textDecoration:'none'}}
 					onClick={() => this.props.logout()}
-					class="btn btn-link"
+					className="btn btn-link"
 					>Logout
 				</button></div>
 			{/* <SideNav name = 'sidenav'/> */}
@@ -124,7 +144,15 @@ class HomePage extends React.Component {
 				</div>
 			</div>
 			<div style={{ position: "relative", top: "140px",width:'60%'}}>
-			
+				{/* <InputGroup className="mb-3">
+					<InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+					<FormControl
+					placeholder="Username"
+					aria-label="Username"
+					aria-describedby="basic-addon1"
+					/>
+				</InputGroup> */}
+
 				<ul
 				className="users-listing"
 				style={{ fontSize: "20px", zIndex: "-1" }}

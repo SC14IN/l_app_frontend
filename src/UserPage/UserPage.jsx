@@ -33,7 +33,7 @@ class UserPage extends React.Component {
             <div className="top-header"><button
 					style={{float:'right',color:'white',marginRight:'100px',textDecoration:'none'}}
 					onClick={() => this.props.logout()}
-					class="btn btn-link"
+					className="btn btn-link"
 					>Logout
 				</button></div>
             <div>
@@ -94,7 +94,7 @@ class UserPage extends React.Component {
                             },
                             },
                             colors: [
-                            "#228B22",
+                            "#39DF39",
                             "#FF8C00",
                             "#FF0000",
                             "#00FF7F",
@@ -203,7 +203,7 @@ class UserPage extends React.Component {
                                 }
                             },
                             colors: [
-                            "#228B22",
+                            "#39DF39",
                             "#FF8C00",
                             "#FF0000",
                             "#00FF7F",

@@ -320,7 +320,9 @@ function createuser(user) {
 	const config = {
 		headers: { Authorization: `Bearer ${token}` },
 	};
-	return axios.post("http://localhost:8050/api/createUser", postData, config);
+	return axios.post("http://localhost:8050/api/createUser", postData, config)
+		.then(handleResponse)
+		;
 }
 function createtask(user) {
 	const u = JSON.parse(localStorage.getItem("user"));
@@ -329,7 +331,13 @@ function createtask(user) {
 	const config = {
 		headers: { Authorization: `Bearer ${token}` },
 	};
-	return axios.post("http://localhost:8050/api/createJob", postData, config);
+	return axios.post("http://localhost:8050/api/createJob", postData, config)
+		.then(handleResponse)
+		.catch((error) => {
+			if( error.response ){
+				console.log(error.response.data); // => the response payload 
+			}
+		});
 }
 function edittask(user) {
 	const u = JSON.parse(localStorage.getItem("user"));

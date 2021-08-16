@@ -7,7 +7,7 @@ import { userActions } from "../_actions";
 import Highcharts from "highcharts/highstock";
 import variablePie from "highcharts/modules/variable-pie.js";
 var qs = require("qs");
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Card } from "react-bootstrap";
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import Modal from 'react-bootstrap/Modal';
@@ -39,7 +39,7 @@ class TasksPage extends React.Component {
 		this.selectStatus = this.selectStatus.bind(this);
 	}
 	componentDidMount() {
-        this.props.alertclear();
+		this.props.alertclear();
 		this.props.getUsers();
 		this.props.getjobs();
 		this.props.getValues();
@@ -47,10 +47,10 @@ class TasksPage extends React.Component {
 		const status = qs.parse(this.props.location.search, {
 			ignoreQueryPrefix: true,
 		}).status;
-        const id = qs.parse(this.props.location.search, {
+		const id = qs.parse(this.props.location.search, {
 			ignoreQueryPrefix: true,
 		}).id;
-		if (status||id) {
+		if (status || id) {
 			this.handleSubmit();
 		}
 		// console.log(id);
@@ -111,7 +111,7 @@ class TasksPage extends React.Component {
 	}
 	handleSubmit() {
 		const { filter } = this.state;
-		console.log(filter);
+		// console.log(filter);
 		this.props.filtertasks({ ...filter });
 	}
 	render() {
@@ -120,10 +120,10 @@ class TasksPage extends React.Component {
 		const status = qs.parse(this.props.location.search, {
 			ignoreQueryPrefix: true,
 		}).status;
-        const id = qs.parse(this.props.location.search, {
+		const id = qs.parse(this.props.location.search, {
 			ignoreQueryPrefix: true,
 		}).id;
-        console.log(user);
+		// console.log(user);
 		return (
 			<div>
 				<div className="top-header">
@@ -135,7 +135,7 @@ class TasksPage extends React.Component {
 							textDecoration: "none",
 						}}
 						onClick={() => this.props.logout()}
-						class="btn btn-link"
+						className="btn btn-link"
 					>
 						Logout
 					</button>
@@ -194,7 +194,7 @@ class TasksPage extends React.Component {
 						<h2>Tasks</h2>
 						<div className="link-1" style={{ flexGrow: "5" }}>
 							<Link
-								to={"/createtask"}
+								to={"/createtask?id=" + user.id}
 								className="link"
 								style={{ float: "right" }}
 							>
@@ -243,7 +243,8 @@ class TasksPage extends React.Component {
 									{status == "CompletedOnTime" ? null : (
 										<option>CompletedOnTime</option>
 									)}
-									{status == "CompletedAfterDeadline" ? null : (
+									{status ==
+									"CompletedAfterDeadline" ? null : (
 										<option>CompletedAfterDeadline</option>
 									)}
 									{status == "Overdue" ? null : (
@@ -271,7 +272,9 @@ class TasksPage extends React.Component {
 												value={item.id}
 												key={item.id}
 											>
-												{item.id==user.id ? 'Me' : item.email}
+												{item.id == user.id
+													? "Me"
+													: item.email}
 											</option>
 										))}
 								</select>
@@ -284,36 +287,32 @@ class TasksPage extends React.Component {
 										backgroundColor: "#f1f1f1",
 									}}
 									onChange={this.selectAssignee}
-								>   
-                                    {id ? <option>Me</option> : null}
-                                    <option>All</option>
+								>
+									{id ? <option>Me</option> : null}
+									<option>All</option>
 									{users.items &&
-										users.items.map((item) => (
-											
-                                            
-												(item.id==user.id)
-													?(
-														id
-														?null
-														:(<option
-															value={item.id}
-															key={item.id}
-														>Me
-														</option>)
-													)
-													:(<option
-															value={item.id}
-															key={item.id}
-														>{item.email}
-													</option>)
-												
-
-											
-										))}
-									
+										users.items.map((item) =>
+											item.id == user.id ? (
+												id ? null : (
+													<option
+														value={item.id}
+														key={item.id}
+													>
+														Me
+													</option>
+												)
+											) : (
+												<option
+													value={item.id}
+													key={item.id}
+												>
+													{item.email}
+												</option>
+											)
+										)}
 								</select>
 							</div>
-							<div style={{ flexGrow: "8" }}>
+							<div style={{ flexGrow: "5" }}>
 								<a
 									className="normal-button"
 									style={{ float: "right" }}
@@ -359,11 +358,82 @@ class TasksPage extends React.Component {
 											style={{
 												padding: "5px",
 												borderRadius: "0",
+												listStyleType: "none",
 											}}
 											key={item.id}
 										>
 											<div>
-												<h4>{item.title}</h4>
+												<Card
+													style={{ width: "25rem" }}
+												>
+													<Card.Body>
+														<Card.Title>
+															{item.title}
+														</Card.Title>
+														<Card.Text>
+															{item.description}
+														</Card.Text>
+														<br></br>Assigner:{" "}
+														{item.assignerName}
+														<br></br>Assignee:{" "}
+														{item.assigneeName}
+														<br></br>Status:{" "}
+														{item.status}
+														<br></br>Duedate:{" "}
+														{item.duedate}
+														{user.id ==
+														item.assignee ? (
+															<div
+																style={{
+																	padding:
+																		"4px 4px 4px 0",
+																}}
+															>
+																Update status:{" "}
+																<select
+																	style={{
+																		width: "auto",
+																		backgroundColor:
+																			"#f1f1f1",
+																	}}
+																	onChange={
+																		this
+																			.updateStatus
+																	}
+																>
+																	<option>
+																		{
+																			item.status
+																		}
+																	</option>
+																	<option
+																		data-id={
+																			item.id
+																		}
+																	>
+																		In
+																		Progress
+																	</option>
+																	<option
+																		data-id={
+																			item.id
+																		}
+																	>
+																		Completed
+																	</option>
+																</select>
+															</div>
+														) : (
+															<div
+																style={{
+																	padding:
+																		"4px 4px 4px 0",
+																}}
+															></div>
+														)}
+													</Card.Body>
+												</Card>
+												{/* <h4>{item.title}</h4>
 												<div
 													style={{
 														wordWrap: "break-word",
@@ -376,49 +446,9 @@ class TasksPage extends React.Component {
 												<br></br>Assignee:{" "}
 												{item.assigneeName}
 												<br></br>Status: {item.status}
-												<br></br>Duedate: {item.duedate}
+												<br></br>Duedate: {item.duedate} */}
 											</div>
-											{user.id == item.assignee ? (
-												<div
-													style={{
-														padding:
-															"4px 4px 4px 0",
-													}}
-												>
-													Update status:{" "}
-													<select
-														style={{
-															width: "auto",
-															backgroundColor:
-																"#f1f1f1",
-														}}
-														onChange={
-															this.updateStatus
-														}
-													>
-														<option>
-															{item.status}
-														</option>
-														<option
-															data-id={item.id}
-														>
-															In Progress
-														</option>
-														<option
-															data-id={item.id}
-														>
-															Completed
-														</option>
-													</select>
-												</div>
-											) : (
-												<div
-													style={{
-														padding:
-															"4px 4px 4px 0",
-													}}
-												></div>
-											)}
+
 											{user.id == item.creator ? (
 												<div className="flex-container">
 													<a
@@ -447,7 +477,6 @@ class TasksPage extends React.Component {
 									);
 								})}
 						</ul>
-						
 					</div>
 				</div>
 			</div>

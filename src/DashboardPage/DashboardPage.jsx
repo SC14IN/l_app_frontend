@@ -285,6 +285,7 @@ class DashboardPage extends React.Component {
 															name: "No Activity",
 															y: jobs.values
 																.noactivity,
+															key: "",
 															z: 100,
 														},
 													],
