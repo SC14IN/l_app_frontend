@@ -12,6 +12,9 @@ import {createtask} from './createtask.reducer';
 import {edit} from './edit.reducer';
 import { overview } from './overview.reducer';
 import {verify} from './verify.reducer';
+
+import { reducer as reduxFormReducer } from 'redux-form';
+
 const rootReducer = combineReducers({
   authentication,
   registration,
@@ -25,6 +28,7 @@ const rootReducer = combineReducers({
   edit,
   overview,
   verify,
+  form:reduxFormReducer,
 });
 
 export default rootReducer;

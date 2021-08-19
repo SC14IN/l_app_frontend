@@ -1,92 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>L_APP</title>
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-    <script>
-      Pusher.logToConsole = true;
+	<head>
+		<meta charset="UTF-8" />
+		<title>L_APP</title>
+		<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+		<script>
+			Pusher.logToConsole = true;
 
-    var pusher = new Pusher('8807ac588a7067358747', {
-      cluster: 'ap2'
-    });
+			var pusher = new Pusher("8807ac588a7067358747", {
+				cluster: "ap2",
+			});
 
-    var channel = pusher.subscribe('my-channel');
-    channel.bind('my-event', function(data) {
-      alert(JSON.stringify(data));
-    });
-    </script>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" /> -->
-    <style>
-      a {
-        cursor: pointer;
-      }
-      .help-block {
-        font-size: 12px;
-      }
-      /* th{background-color: black;} */
-      body {
-        margin: 0;
-      }
-      /* ul.listing{
+			var channel = pusher.subscribe("my-channel");
+			channel.bind("my-event", function (data) {
+				alert(JSON.stringify(data));
+			});
+		</script>
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" /> -->
+		<style>
+			a {
+				cursor: pointer;
+			}
+			.help-block {
+				font-size: 12px;
+			}
+			/* th{background-color: black;} */
+			body {
+				margin: 0;
+			}
+			/* ul.listing{
         margin-top: 130px;
       } */
-      ul.navbar0 {
-        list-style-type: none;
-        padding: 0;
-        width: 15%;
-        background-color: #f1f1f1;
-        position: relative;
-        position: fixed;
-        top: 40px;
-        height: 100%;
-        overflow: auto;
-      }
+			ul.navbar0 {
+				list-style-type: none;
+				padding: 0;
+				width: 15%;
+				background-color: #f1f1f1;
+				position: relative;
+				position: fixed;
+				top: 40px;
+				height: 100%;
+				overflow: auto;
+			}
 
-      li a {
-        display: block;
-        color: #000;
-        padding: 8px 16px;
-        text-decoration: none;
-      }
+			li a {
+				display: block;
+				color: #000;
+				padding: 8px 16px;
+				text-decoration: none;
+			}
 
-      li a.active {
-        background-color: #04aa6d;
-        color: white;
-      }
+			li a.active {
+				background-color: #04aa6d;
+				color: white;
+			}
 
-      li a:hover:not(.active) {
-        background-color: #555;
-        color: white;
-      }
-      #users {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 80%;
-      }
+			li a:hover:not(.active) {
+				background-color: #555;
+				color: white;
+			}
+			#users {
+				font-family: Arial, Helvetica, sans-serif;
+				border-collapse: collapse;
+				width: 80%;
+			}
 
-      #users td,
-      #users th {
-        border: 1px solid #ddd;
-        padding: 8px;
-      }
+			#users td,
+			#users th {
+				border: 1px solid #ddd;
+				padding: 8px;
+			}
 
-      #users tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
+			#users tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
 
-      #users tr:hover {
-        background-color: #ddd;
-      }
+			#users tr:hover {
+				background-color: #ddd;
+			}
 
-      #users th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #04aa6d;
-        color: white;
-      }
-      /* input[type="text"],
+			#users th {
+				padding-top: 12px;
+				padding-bottom: 12px;
+				text-align: left;
+				background-color: #04aa6d;
+				color: white;
+			}
+			/* input[type="text"],
       input[type="email"],
       input[type="password"] {
         width: 50%;
@@ -121,63 +121,75 @@
       button[type="submit"]:hover {
         background-color: #45a049;
       } */
-      .flex-container {
-        display: flex;
-        background-color: #f1f1f1;
-        width: auto;
-        /* margin-right: 10%; */
-      }
-      .flex-container-fixed {
-        /* display: flex; */
-        background-color: #f1f1f1;
-        width: auto;
-        margin-right: 10%;
-        /* position: fixed; */
-        /* float: top; */
-      }
+			.flex-container {
+				display: flex;
+				background-color: #f1f1f1;
+				width: auto;
+				/* margin-right: 10%; */
+			}
+			.flex-container-fixed {
+				/* display: flex; */
+				background-color: #f1f1f1;
+				width: auto;
+				margin-right: 10%;
+				/* position: fixed; */
+				/* float: top; */
+			}
 
-      .flex-container > div {
-        margin: 5px;
-        padding: 5px;
-        font-size: 17px;
-      }
-      div.formdiv {
-        background-color: lightgrey;
-        border-radius: 5px;
-        padding: 90px;
-      }
-      div.link:hover {
-        background-color: lightgrey;
-      }
-      a.normal-button {
-        background-color: lightgrey;
-        border-radius: 3px;
-        margin-left: 1%;
-      }
-      div.top-header {
-        float: top;
-        /* position: fixed; */
-        display: block;
-        height: 40px;
-        width: 100%;
-        background-color: #555;
-      }
-      /* div.big-container{
+			.flex-container > div {
+				margin: 5px;
+				padding: 5px;
+				font-size: 17px;
+			}
+			div.formdiv {
+				background-color: lightgrey;
+				border-radius: 5px;
+				padding: 90px;
+			}
+			div.link:hover {
+				background-color: lightgrey;
+			}
+			a.normal-button {
+				background-color: lightgrey;
+				border-radius: 3px;
+				margin-left: 1%;
+			}
+			div.top-header {
+				float: top;
+				/* position: fixed; */
+				display: block;
+				height: 40px;
+				width: 100%;
+				background-color: #555;
+			}
+			/* div.big-container{
         margin-top: 40px;
       } */
-      div.top-header {
-        position: fixed;
-        width: 100%;
-        z-index: 1000;
+			div.top-header {
+				position: fixed;
+				width: 100%;
+				z-index: 1000;
+			}
+			#close {
+				float: right;
+				padding: 2px 5px;
+				background: #ccc;
+			}
+			Card.Title.link-button:hover {
+				color: lightseagreen;
+			}
+			input[name="name"],
+			input[name="email"],
+			input[name="password"],
+			input[name="password_confirmation"] {
+				width: 50%;
+			}
+      input.text-border{
+        border: 1px solid #ff0000;
       }
-      #close {
-        float:right;
-        padding:2px 5px;
-        background:#ccc;
-    }
-    </style>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+		</style>
+	</head>
+	<body>
+		<div id="app"></div>
+	</body>
 </html>

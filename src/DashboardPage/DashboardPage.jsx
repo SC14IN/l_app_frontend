@@ -8,12 +8,21 @@ import Highcharts from "highcharts/highstock";
 import variablePie from "highcharts/modules/variable-pie.js";
 //import HighchartsReact from "./HighchartsReact.js";
 import HighchartsReact from "highcharts-react-official";
+import {
+	Modal,
+	Button,
+	Card,
+	ListGroup,
+	Container,
+	Col,
+	Row,
+} from "react-bootstrap";
 
 variablePie(Highcharts);
 
 class DashboardPage extends React.Component {
 	componentDidMount() {
-        this.props.alertclear();
+		this.props.alertclear();
 		this.props.getjobs();
 		this.props.getValuesByMonth();
 		this.props.getValues();
@@ -90,271 +99,256 @@ class DashboardPage extends React.Component {
 							</button>} */}
 						</div>
 					</div>
-					<div
-						className="flex-container"
-						style={{ position: "relative", top: "120px" }}
-					>
-						<ul
-							className="listing"
-							style={{
-								width: "40%",
-								backgroundColor: "#f1f1f1",
-								padding: "20px",
-							}}
-						>
-							{jobs.loading && <em>Loading...</em>}
-							{/* {jobs.error && (
+					<div className="" style={{ position: "relative", top: "120px" }}>
+						<Container>
+							<Row>
+								<Col>
+									<ul
+										className="listing"
+										style={{
+											listStyleType: "none",
+											width: "40%",
+											// backgroundColor: "#f1f1f1",
+											padding: "20px",
+										}}
+									>
+										{jobs.loading && <em>Loading...</em>}
+										{/* {jobs.error && (
 								<span className="text-danger">
 									ERROR: {jobs.error}
 								</span>
 							)} */}
-							{jobs.items &&
-								//jobs.items.slice(1,3) &&
-								jobs.items.map((item, id) => {
-									return (
-										<li
-											style={{
-												// outline: "auto",
-												padding: "5px",
-												borderRadius: "0",
-											}}
-											key={item.id}
-										>
-											<div>
-												<h4>{item.title}</h4>
-												<div
-													style={{
-														wordWrap: "break-word",
-													}}
-												>
-													- {item.description}{" "}
-												</div>
-												<br></br>Assigner:{" "}
-												{item.assignerName}
-												<br></br>Assignee:{" "}
-												{item.assigneeName}
-												<br></br>Status: {item.status}
-												<br></br>Duedate: {item.duedate}
-											</div>
-											{/* <div className="flex-container">
-                            <a
-                            className="normal-button"
-                            onClick={() => this.handleEditUser(item)}
-                            >
-                            Edit
-                            </a>
-                            <a
-                            className="normal-button"
-                            onClick={() => this.handleDeleteUser(item.id)}
-                            >
-                            Delete
-                            </a>
-                        </div> */}
-										</li>
-									);
-								})}
-						</ul>
-
-						<div style={{ flexGrow: "8" }}>
-							{/* {jobs.loading && <em>Loading Charts...</em>}
-                        {jobs.error && <span className="text-danger">ERROR: {jobs.error}</span>} */}
-							{jobs.values && (
-								<div style={{ width: "100%" }}>
-									My Performance
-									<HighchartsReact
-										highcharts={Highcharts}
-										options={{
-											chart: {
-												// renderTo: 'container',
-												type: "variablepie",
-												margin: [0, 0, 0, 0],
-												//   marginLeft: -100,
-												events: {
-													load: function () {
-														this.renderer
-															.circle(
-																this
-																	.chartWidth /
-																	2,
-																this
-																	.plotHeight /
-																	2 +
-																	this
-																		.plotTop,
-																this
-																	.plotHeight /
-																	4
-															)
-															.attr({
-																fill: "rgba(0,0,0,0)",
-																// stroke: "#2ec277",
-																left: -100,
-																"stroke-width": 1,
-															})
-															.add();
-													},
-												},
-											},
-											colors: [
-												"#39DF39",
-												"#FF8C00",
-												"#FF0000",
-												"#BEFDBE",
-												"#808080",
-											],
-
-											title: {
-												text: null,
-											},
-
-											legend: {
-												align: "right",
-												verticalAlign: "top",
-												layout: "vertical",
-												x: 0,
-												y: 0,
-												itemMarginTop: 5,
-												itemMarginBottom: 5,
-												itemStyle: {
-													font: "10pt Trebuchet MS, Verdana, sans-serif",
-													color: "#333333",
-												},
-											},
-											plotOptions: {
-												series: {
-													cursor: "pointer",
-													stacking: "normal",
-													dataLabels: {
-														enabled: false,
-													},
-													showInLegend: true,
-													size: 200,
-													// marginLeft: 5,
-												},
-											},
-											plotOptions: {
-												series: {
-													point: {
-														events: {
-															click: function () {
-																location.href =
-																	"http://localhost:8080/tasks" +
-																	this.options
-																		.key;
+										{jobs.items &&
+											//jobs.items.slice(1,3) &&
+											jobs.items.map((item, id) => {
+												return id < 1 ? (
+													<li
+														style={{
+															// outline: "auto",
+															padding: "5px",
+															borderRadius: "0",
+														}}
+														key={item.id}
+													>
+														<Card style={{ width: "18rem" }}>
+															<Card.Body>
+																<Card.Title>{item.title}</Card.Title>
+																<Card.Text>{item.description}</Card.Text>
+																<ListGroup>
+																	<ListGroup.Item>
+																		Assigner: {item.assignerName}
+																	</ListGroup.Item>
+																	<ListGroup.Item>
+																		Assignee: {item.assigneeName}
+																	</ListGroup.Item>
+																	<ListGroup.Item>
+																		Status: {item.status}
+																	</ListGroup.Item>
+																	<ListGroup.Item>
+																		Duedate: {item.duedate}
+																	</ListGroup.Item>
+																</ListGroup>
+															</Card.Body>
+														</Card>
+													</li>
+												) : null;
+											})}
+									</ul>
+								</Col>
+								<Col xs={6}>
+									<div style={{ flexGrow: "8", padding: "20px" }}>
+										{jobs.values && (
+											<div style={{ width: "100%" }}>
+												My Performance
+												<HighchartsReact
+													highcharts={Highcharts}
+													options={{
+														chart: {
+															// renderTo: 'container',
+															type: "variablepie",
+															margin: [0, 0, 0, 0],
+															//   marginLeft: -100,
+															events: {
+																load: function () {
+																	this.renderer
+																		.circle(
+																			this.chartWidth / 2,
+																			this.plotHeight / 2 + this.plotTop,
+																			this.plotHeight / 4
+																		)
+																		.attr({
+																			fill: "rgba(0,0,0,0)",
+																			// stroke: "#2ec277",
+																			left: -100,
+																			"stroke-width": 1,
+																		})
+																		.add();
+																},
 															},
 														},
-													},
-												},
-											},
-											series: [
-												{
-													minPointSize: 5,
-													innerSize: "0%",
-													zMin: 0,
-													name: "Performance",
-													data: [
-														{
-															name: "Completed On Time",
-															y: jobs.values
-																.completedOnTime,
-															key: "?status=CompletedOnTime&id="+user.id,
-															z: 100,
+														colors: [
+															"#39DF39",
+															"#FF8C00",
+															"#FF0000",
+															"#BEFDBE",
+															"#808080",
+														],
+
+														title: {
+															text: null,
 														},
-														{
-															name: "Completed After Deadline",
-															y: jobs.values
-																.completedAfterDeadline,
-															key: "?status=CompletedAfterDeadline&id="+user.id,
-															z: 100,
+
+														legend: {
+															align: "right",
+															verticalAlign: "top",
+															layout: "vertical",
+															x: 0,
+															y: 0,
+															itemMarginTop: 5,
+															itemMarginBottom: 5,
+															itemStyle: {
+																font: "10pt Trebuchet MS, Verdana, sans-serif",
+																color: "#333333",
+															},
 														},
-														{
-															name: "Overdue",
-															y: jobs.values
-																.overdue,
-															key: "?status=Overdue&id="+user.id,
-															z: 100,
+														plotOptions: {
+															series: {
+																cursor: "pointer",
+																stacking: "normal",
+																dataLabels: {
+																	enabled: false,
+																},
+																showInLegend: true,
+																size: 200,
+																// marginLeft: 5,
+															},
 														},
-														{
-															name: "inprogress",
-															y: jobs.values
-																.inprogress,
-															key: "?status=Inprogress&id="+user.id,
-															z: 100,
+														plotOptions: {
+															series: {
+																point: {
+																	events: {
+																		click: function () {
+																			location.href =
+																				"http://localhost:8080/tasks" +
+																				this.options.key;
+																		},
+																	},
+																},
+															},
 														},
-														{
-															name: "No Activity",
-															y: jobs.values
-																.noactivity,
-															key: "",
-															z: 100,
+														series: [
+															{
+																minPointSize: 5,
+																innerSize: "0%",
+																zMin: 0,
+																name: "Performance",
+																data: [
+																	{
+																		name: "Completed On Time",
+																		y: jobs.values.completedOnTime,
+																		key:
+																			"?status=CompletedOnTime&id=" + user.id,
+																		z: 100,
+																	},
+																	{
+																		name: "Completed After Deadline",
+																		y: jobs.values.completedAfterDeadline,
+																		key:
+																			"?status=CompletedAfterDeadline&id=" +
+																			user.id,
+																		z: 100,
+																	},
+																	{
+																		name: "Overdue",
+																		y: jobs.values.overdue,
+																		key: "?status=Overdue&id=" + user.id,
+																		z: 100,
+																	},
+																	{
+																		name: "inprogress",
+																		y: jobs.values.inprogress,
+																		key: "?status=Inprogress&id=" + user.id,
+																		z: 100,
+																	},
+																	{
+																		name: "No Activity",
+																		y: jobs.values.noactivity,
+																		key: "",
+																		z: 100,
+																	},
+																],
+															},
+														],
+													}}
+													ref="chartComponent1"
+												/>
+											</div>
+										)}
+									</div>
+								</Col>
+							</Row>
+							<Row>
+								<Col>
+									<div>
+										{jobs.monthlyValues && (
+											<div style={{ width: "100%" }}>
+												<HighchartsReact
+													highcharts={Highcharts}
+													options={{
+														title: "Monthly performance",
+														chart: {
+															type: "column",
 														},
-													],
-												},
-											],
-										}}
-										ref="chartComponent1"
-									/>
-								</div>
-							)}
-							<br></br>
-							{jobs.monthlyValues && (
-								<div style={{ width: "100%" }}>
-									<HighchartsReact
-										highcharts={Highcharts}
-										options={{
-											chart: {
-												type: "column",
-											},
-											xAxis: {
-												categories: [
-													"Jan",
-													"Feb",
-													"Mar",
-													"Apr",
-													"May",
-													"Jun",
-													"Jul",
-													"Aug",
-													"Sep",
-													"Oct",
-													"Nov",
-													"Dec",
-												],
-												crosshair: true,
-											},
-											yAxes: {
-												minTickInterval: 1,
-											},
-											colors: [
-												"#39DF39",
-												"#FF8C00",
-												"#FF0000",
-												"#00FF7F",
-												"#808080",
-											],
-											series: [
-												{
-													name: "Completed On Time",
-													data: jobs.monthlyValues
-														.completedOnTime,
-												},
-												{
-													name: "Completed After Deadline",
-													data: jobs.monthlyValues
-														.completedAfterDeadline,
-												},
-												{
-													name: "Overdue",
-													data: jobs.monthlyValues
-														.overdue,
-												},
-											],
-										}}
-										ref="chartComponent2"
-									/>
-								</div>
-							)}
-						</div>
+														xAxis: {
+															categories: [
+																"Jan",
+																"Feb",
+																"Mar",
+																"Apr",
+																"May",
+																"Jun",
+																"Jul",
+																"Aug",
+																"Sep",
+																"Oct",
+																"Nov",
+																"Dec",
+															],
+															crosshair: true,
+														},
+														yAxes: {
+															minTickInterval: 1,
+														},
+														colors: [
+															"#39DF39",
+															"#FF8C00",
+															"#FF0000",
+															"#00FF7F",
+															"#808080",
+														],
+														series: [
+															{
+																name: "Completed On Time",
+																data: jobs.monthlyValues.completedOnTime,
+															},
+															{
+																name: "Completed After Deadline",
+																data: jobs.monthlyValues.completedAfterDeadline,
+															},
+															{
+																name: "Overdue",
+																data: jobs.monthlyValues.overdue,
+															},
+														],
+													}}
+													ref="chartComponent2"
+												/>
+											</div>
+										)}
+									</div>
+								</Col>
+							</Row>
+						</Container>
 					</div>
 				</div>
 			</div>

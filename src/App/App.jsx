@@ -21,11 +21,10 @@ import {TaskOverviewPage} from '../TaskOverviewPage';
 import { UserPage } from '../UserPage';
 import { VerifyPage } from '../VerifyPage';
 import './styles.scss';
+import { TasksDetailPage } from '../TaskDetailPage';
 class App extends React.Component {
-    
     render() {
-        const { alert } = this.props;
-        const notify = () => toast("Wow so easy!");
+        
 
         return (
             <div className="jumbotron">
@@ -60,6 +59,7 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/editTask" component={EditTaskPage} />
                                 <PrivateRoute exact path="/overview" component={TaskOverviewPage} />
                                 <PrivateRoute  path="/performance" component={UserPage} />
+                                <PrivateRoute  path="/taskdetailpage" component={TasksDetailPage} />
                                 <Redirect from="*" to="/" />
 
                                 {/* <Route path="/test" component={TestPage} /> */}

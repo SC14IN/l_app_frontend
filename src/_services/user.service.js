@@ -1,6 +1,6 @@
 import { authHeader } from "../_helpers";
 import { userActions } from "../_actions";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export const userService = {
 	login,
@@ -31,6 +31,8 @@ export const userService = {
 	verifyuser,
 	deleteself,
 	edittask,
+	filterjobbyid,
+	checkemail,
 };
 
 function login(email, password) {
@@ -71,7 +73,7 @@ function verifyuser(user) {
 		body: JSON.stringify(user),
 	};
 
-	return fetch("http://localhost:8050/api/emailVerify", requestOptions).then(
+	return fetch("http://localhost:8050/api/emailverify", requestOptions).then(
 		handleResponse
 	);
 }
@@ -82,10 +84,9 @@ function resetpassword(user) {
 		body: JSON.stringify(user),
 	};
 
-	return fetch(
-		"http://localhost:8050/api/resetPassword",
-		requestOptions
-	).then(handleResponse);
+	return fetch("http://localhost:8050/api/resetPassword", requestOptions).then(
+		handleResponse
+	);
 }
 function forgotpassword(user) {
 	const requestOptions = {
@@ -94,10 +95,9 @@ function forgotpassword(user) {
 		body: JSON.stringify(user),
 	};
 
-	return fetch(
-		"http://localhost:8050/api/forgotPassword",
-		requestOptions
-	).then(handleResponse);
+	return fetch("http://localhost:8050/api/forgotPassword", requestOptions).then(
+		handleResponse
+	);
 }
 function getAll() {
 	const requestOptions = {
@@ -105,8 +105,17 @@ function getAll() {
 		headers: authHeader(),
 	};
 
-	return fetch("http://localhost:8050/api/listUsers", requestOptions)
-		.then( handleResponse);
+	return fetch("http://localhost:8050/api/listUsers", requestOptions).then(
+		handleResponse
+	);
+}
+function checkemail(values) {
+	const requestOptions = {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(values),
+	};
+	return fetch("http://localhost:8050/api/email", requestOptions);
 }
 function getjobs() {
 	const requestOptions = {
@@ -320,9 +329,7 @@ function createuser(user) {
 	const config = {
 		headers: { Authorization: `Bearer ${token}` },
 	};
-	return axios.post("http://localhost:8050/api/createUser", postData, config)
-		.then(handleResponse)
-		;
+	return axios.post("http://localhost:8050/api/createUser", postData, config);
 }
 function createtask(user) {
 	const u = JSON.parse(localStorage.getItem("user"));
@@ -331,11 +338,12 @@ function createtask(user) {
 	const config = {
 		headers: { Authorization: `Bearer ${token}` },
 	};
-	return axios.post("http://localhost:8050/api/createJob", postData, config)
+	return axios
+		.post("http://localhost:8050/api/createJob", postData, config)
 		.then(handleResponse)
 		.catch((error) => {
-			if( error.response ){
-				console.log(error.response.data); // => the response payload 
+			if (error.response) {
+				console.log(error.response.data); // => the response payload
 			}
 		});
 }
@@ -355,15 +363,24 @@ function updatestatus(status, id) {
 	const config = {
 		headers: { Authorization: `Bearer ${token}` },
 	};
-	return axios.put(
-		"http://localhost:8050/api/updateStatus",
-		postData,
-		config
-	);
+	return axios.put("http://localhost:8050/api/updateStatus", postData, config);
 }
+
+function filterjobbyid(id) {
+	const requestOptions = {
+		method: "GET",
+		headers: authHeader(),
+	};
+
+	return fetch(
+		"http://localhost:8050/api/filterJobs" + "?id=" + id,
+		requestOptions
+	).then(handleResponse);
+}
+
 function handleResponse(response) {
 	if (response.status == 401) {
-		toast.error('Session expired, Login again', {
+		toast.error("Session expired, Login again", {
 			position: "top-right",
 			autoClose: 5000,
 			hideProgressBar: false,
@@ -371,18 +388,32 @@ function handleResponse(response) {
 			pauseOnHover: true,
 			draggable: true,
 			progress: undefined,
-			});
+		});
 		userActions.logout();
-		return ;
+		return;
 	}
+	// else if (response.status >= 400) {
+	// 	console.log(response.text());
+	// 	toast.error(JSON.parse(response.text()), {
+	// 		position: "top-right",
+	// 		autoClose: 5000,
+	// 		hideProgressBar: false,
+	// 		closeOnClick: true,
+	// 		pauseOnHover: true,
+	// 		draggable: true,
+	// 		progress: undefined,
+	// 	});
+	// 	return;
+	// }
 	return response.text().then((text) => {
 		const data = text && JSON.parse(text);
-		// console.log('in handle response')
+
 		if (!response.ok) {
 			if (response.status == 401) {
 				userActions.logout();
 			}
 			const error = (data && data.message) || response.statusText;
+			// console.log(error);
 			return Promise.reject(error);
 		}
 		return data;

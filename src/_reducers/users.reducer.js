@@ -2,10 +2,10 @@ import { userConstants } from "../_constants";
 function sortAsc(arr, field) {
 	return arr.sort(function (a, b) {
 		if (a[field] > b[field]) {
-		return 1;
+			return 1;
 		}
 		if (b[field] > a[field]) {
-		return -1;
+			return -1;
 		}
 		return 0;
 	});
@@ -30,7 +30,8 @@ export function users(state = {}, action) {
 			};
 		case userConstants.GETALL_SUCCESS:
 			return {
-				...state,loading:false,
+				...state,
+				loading: false,
 				items: action.users,
 			};
 		case userConstants.GETALL_FAILURE:
@@ -47,7 +48,8 @@ export function users(state = {}, action) {
 		case userConstants.GETUSER_SUCCESS:
 			return {
 				...state,
-				user: action.user,loading:false,
+				user: action.user,
+				loading: false,
 			};
 		case userConstants.GETUSER_FAILURE:
 			return {
@@ -56,41 +58,36 @@ export function users(state = {}, action) {
 			};
 
 		case userConstants.DELETE_REQUEST:
-			// add 'deleting:true' property to user being deleted
-			// console.log(action.id);
-
-			const ans = {
+			return {
 				...state,
 				items: state.items.map((user) =>
-				user.id === action.id ? { ...user, deleting: true } : user
+					user.id === action.id ? { ...user, isDeleting: true } : user
 				),
 			};
-			// console.log(ans);
-			return ans;
 		case userConstants.DELETE_SUCCESS:
 			// console.log(state.items.filter(user => user.id !== action.id));
 			// remove deleted user from state
 			// const userList = state.items;
-			console.log(state.items.filter((user) => user.id !== action.id));
+			// console.log(state.items.filter((user) => user.id !== action.id));
 			return {
 				...state,
 				items: state.items.filter((user) => user.id !== action.id),
 			};
-			// case userConstants.DELETE_FAILURE:
-			//   // remove 'deleting:true' property and add 'deleteError:[error]' property to user
-			//   return {
-			//     ...state,
-			//     items: state.items.map(user => {
-			//       if (user.id === action.id) {
-			//         // make copy of user without 'deleting:true' property
-			//         const { deleting, ...userCopy } = user;
-			//         // return copy of user with 'deleteError:[error]' property
-			//         return { ...userCopy, deleteError: action.error };
-			//       }
+		// case userConstants.DELETE_FAILURE:
+		//   // remove 'deleting:true' property and add 'deleteError:[error]' property to user
+		//   return {
+		//     ...state,
+		//     items: state.items.map(user => {
+		//       if (user.id === action.id) {
+		//         // make copy of user without 'deleting:true' property
+		//         const { deleting, ...userCopy } = user;
+		//         // return copy of user with 'deleteError:[error]' property
+		//         return { ...userCopy, deleteError: action.error };
+		//       }
 
-			//       return user;
-			// })
-			// };
+		//       return user;
+		// })
+		// };
 		case userConstants.FILTER_BY_VALUE:
 			// //the value passed from our presentational component
 			let value = action.value.value.toLowerCase();
@@ -98,17 +95,17 @@ export function users(state = {}, action) {
 			let filteredValues = state.items.filter((user) => {
 				//return any product whose name or designer contains the input box string
 				return (
-				user.name.toLowerCase().includes(value) ||
-				user.email.toLowerCase().includes(value) ||
-				user.role.toLowerCase().includes(value)
+					user.name.toLowerCase().includes(value) ||
+					user.email.toLowerCase().includes(value) ||
+					user.role.toLowerCase().includes(value)
 				);
 			});
 			let rest = state.items.filter((user) => {
 				//return any product whose name or designer contains the input box string
 				return !(
-				user.name.toLowerCase().includes(value) ||
-				user.email.toLowerCase().includes(value) ||
-				user.role.toLowerCase().includes(value)
+					user.name.toLowerCase().includes(value) ||
+					user.email.toLowerCase().includes(value) ||
+					user.role.toLowerCase().includes(value)
 				);
 			});
 			// console.log('filtervalues',filteredValues);
@@ -128,7 +125,8 @@ export function users(state = {}, action) {
 			};
 		case userConstants.FILTERBYNAME_SUCCESS:
 			return {
-				...state,loading:false,
+				...state,
+				loading: false,
 				items: action.users,
 			};
 		case userConstants.FILTERBYNAME_FAILURE:
@@ -171,8 +169,8 @@ export function users(state = {}, action) {
 		case userConstants.SORT_BY_NAME:
 			let sortedArr =
 				action.direction === "asc"
-				? sortAsc(state.items, "name")
-				: sortDesc(state.items, "name");
+					? sortAsc(state.items, "name")
+					: sortDesc(state.items, "name");
 
 			return {
 				...state,
@@ -181,8 +179,8 @@ export function users(state = {}, action) {
 		case userConstants.SORT_BY_EMAIL:
 			let sortedArrr =
 				action.direction === "asc"
-				? sortAsc(state.items, "email")
-				: sortDesc(state.items, "email");
+					? sortAsc(state.items, "email")
+					: sortDesc(state.items, "email");
 
 			return {
 				...state,

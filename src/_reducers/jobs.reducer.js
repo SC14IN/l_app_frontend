@@ -50,6 +50,22 @@ export function jobs(state = {}, action) {
             error: action.error,
         };
 
+
+        case userConstants.FILTERBYID_REQUEST:
+        return {
+            ...state,
+            loading: true,
+        };
+        case userConstants.FILTERBYID_SUCCESS:
+        return {
+            ...state,loading:false,
+            job: action.jobs,
+        };
+        case userConstants.FILTERBYID_FAILURE:
+        return {
+            ...state,
+            error: action.error,
+        };
         case userConstants.FILTERBYSTATUS_REQUEST:
         return {
             ...state,

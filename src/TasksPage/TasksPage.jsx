@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
@@ -7,16 +7,31 @@ import { userActions } from "../_actions";
 import Highcharts from "highcharts/highstock";
 import variablePie from "highcharts/modules/variable-pie.js";
 var qs = require("qs");
-import { Modal, Button, Card } from "react-bootstrap";
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import Modal from 'react-bootstrap/Modal';
-// import ModalBody from "react-bootstrap/ModalBody";
-// import ModalHeader from "react-bootstrap/ModalHeader";
-// import ModalFooter from "react-bootstrap/ModalFooter";
-// import ModalTitle from "react-bootstrap/ModalTitle";
+import { Modal, Button, Card, ListGroup } from "react-bootstrap";
+import SimpleForm from "./ReduxForm";
 
 variablePie(Highcharts);
+function MyVerticallyCenteredModal(props) {
+	return (
+		<Modal
+			{...props}
+			size="lg"
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">Add Task</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<SimpleForm onSubmit={userActions.createtask} />
+			</Modal.Body>
+			<Modal.Footer>
+				<Button onClick={props.onHide}>Close</Button>
+			</Modal.Footer>
+		</Modal>
+	);
+}
+
 class TasksPage extends React.Component {
 	constructor(props) {
 		super(props);
@@ -32,11 +47,14 @@ class TasksPage extends React.Component {
 					ignoreQueryPrefix: true,
 				}).id,
 			},
+			modalShow: false,
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.selectAssignee = this.selectAssignee.bind(this);
 		this.selectAssigner = this.selectAssigner.bind(this);
 		this.selectStatus = this.selectStatus.bind(this);
+		this.setModalShow = this.setModalShow.bind(this);
+		this.handlecreate = this.handlecreate.bind(this);
 	}
 	componentDidMount() {
 		this.props.alertclear();
@@ -53,14 +71,12 @@ class TasksPage extends React.Component {
 		if (status || id) {
 			this.handleSubmit();
 		}
-		// console.log(id);
 	}
 	handleDeleteUser(id) {
 		this.props.deletejob(id);
 	}
 	handleEditUser(job) {
 		this.props.dispatchId(job);
-		// console.log(job);
 		history.push("/editTask");
 	}
 	updateStatus = (e) => {
@@ -111,19 +127,30 @@ class TasksPage extends React.Component {
 	}
 	handleSubmit() {
 		const { filter } = this.state;
-		// console.log(filter);
 		this.props.filtertasks({ ...filter });
 	}
+	taskOverview(id) {
+		history.push("/taskdetailpage?id=" + id);
+	}
+	setModalShow(e) {
+		this.setState({ modalShow: e });
+	}
+	handlecreate(values) {
+		this.setState({ modalShow: false });
+		this.props.createTask(values).then((user) => {
+			this.props.getjobs();
+		});
+	}
 	render() {
-		const { jobs, users } = this.props;
-		const { user } = this.props;
+		const { jobs, users, user, createTask } = this.props;
+		const { modalShow } = this.state;
 		const status = qs.parse(this.props.location.search, {
 			ignoreQueryPrefix: true,
 		}).status;
 		const id = qs.parse(this.props.location.search, {
 			ignoreQueryPrefix: true,
 		}).id;
-		// console.log(user);
+
 		return (
 			<div>
 				<div className="top-header">
@@ -237,19 +264,16 @@ class TasksPage extends React.Component {
 								>
 									{status ? <option>{status}</option> : null}
 									<option>All</option>
-									{status == "Inprogress" ? null : (
-										<option>Inprogress</option>
-									)}
+									{status == "Inprogress" ? null : <option>Inprogress</option>}
 									{status == "CompletedOnTime" ? null : (
-										<option>CompletedOnTime</option>
+										<option value="CompletedOnTime">Completed On Time</option>
 									)}
-									{status ==
-									"CompletedAfterDeadline" ? null : (
-										<option>CompletedAfterDeadline</option>
+									{status == "CompletedAfterDeadline" ? null : (
+										<option value="CompletedAfterDeadline">
+											Completed After Deadline
+										</option>
 									)}
-									{status == "Overdue" ? null : (
-										<option>Overdue</option>
-									)}
+									{status == "Overdue" ? null : <option>Overdue</option>}
 								</select>
 							</div>
 							<div style={{ width: "1%" }}></div>
@@ -260,7 +284,7 @@ class TasksPage extends React.Component {
 							<div>
 								<select
 									style={{
-										width: "auto",
+										width: "100%",
 										backgroundColor: "#f1f1f1",
 									}}
 									onChange={this.selectAssigner}
@@ -268,13 +292,8 @@ class TasksPage extends React.Component {
 									<option>All</option>
 									{users.items &&
 										users.items.map((item) => (
-											<option
-												value={item.id}
-												key={item.id}
-											>
-												{item.id == user.id
-													? "Me"
-													: item.email}
+											<option value={item.id} key={item.id}>
+												{item.id == user.id ? "Me" : item.email}
 											</option>
 										))}
 								</select>
@@ -283,7 +302,7 @@ class TasksPage extends React.Component {
 							<div>
 								<select
 									style={{
-										width: "auto",
+										width: "100%",
 										backgroundColor: "#f1f1f1",
 									}}
 									onChange={this.selectAssignee}
@@ -294,18 +313,12 @@ class TasksPage extends React.Component {
 										users.items.map((item) =>
 											item.id == user.id ? (
 												id ? null : (
-													<option
-														value={item.id}
-														key={item.id}
-													>
+													<option value={item.id} key={item.id}>
 														Me
 													</option>
 												)
 											) : (
-												<option
-													value={item.id}
-													key={item.id}
-												>
+												<option value={item.id} key={item.id}>
 													{item.email}
 												</option>
 											)
@@ -338,19 +351,32 @@ class TasksPage extends React.Component {
 						<ul
 							className="listing"
 							style={{
-								width: "50%",
-								backgroundColor: "#f1f1f1",
-								padding: "20px",
 								position: "relative",
 								top: "300px",
 							}}
 						>
+							<Button variant="primary" onClick={() => this.setModalShow(true)}>
+								Add task
+							</Button>
+							<Modal
+								show={modalShow}
+								onHide={() => this.setModalShow(false)}
+								animation={false}
+							>
+								<Modal.Header closeButton>
+									<Modal.Title>Modal heading</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<SimpleForm onSubmit={this.handlecreate} />
+								</Modal.Body>
+								<Modal.Footer>
+									<Button onClick={() => this.setModalShow(false)}>
+										Close
+									</Button>
+								</Modal.Footer>
+							</Modal>
 							{jobs.loading && <em>Loading Tasks...</em>}
-							{/* {jobs.error && (
-								<span className="text-danger">
-									ERROR: {jobs.error}
-								</span>
-							)} */}
+
 							{jobs.items &&
 								jobs.items.map((item) => {
 									return (
@@ -363,116 +389,19 @@ class TasksPage extends React.Component {
 											key={item.id}
 										>
 											<div>
-												<Card
-													style={{ width: "25rem" }}
-												>
+												<Card style={{ width: "25rem" }}>
 													<Card.Body>
-														<Card.Title>
+														<Card.Title
+															className="link-button"
+															style={{ color: "blue", cursor: "pointer" }}
+															onClick={() => this.taskOverview(item.id)}
+														>
 															{item.title}
 														</Card.Title>
-														<Card.Text>
-															{item.description}
-														</Card.Text>
-														<br></br>Assigner:{" "}
-														{item.assignerName}
-														<br></br>Assignee:{" "}
-														{item.assigneeName}
-														<br></br>Status:{" "}
-														{item.status}
-														<br></br>Duedate:{" "}
-														{item.duedate}
-														{user.id ==
-														item.assignee ? (
-															<div
-																style={{
-																	padding:
-																		"4px 4px 4px 0",
-																}}
-															>
-																Update status:{" "}
-																<select
-																	style={{
-																		width: "auto",
-																		backgroundColor:
-																			"#f1f1f1",
-																	}}
-																	onChange={
-																		this
-																			.updateStatus
-																	}
-																>
-																	<option>
-																		{
-																			item.status
-																		}
-																	</option>
-																	<option
-																		data-id={
-																			item.id
-																		}
-																	>
-																		In
-																		Progress
-																	</option>
-																	<option
-																		data-id={
-																			item.id
-																		}
-																	>
-																		Completed
-																	</option>
-																</select>
-															</div>
-														) : (
-															<div
-																style={{
-																	padding:
-																		"4px 4px 4px 0",
-																}}
-															></div>
-														)}
+														<Card.Text>{item.description}</Card.Text>
 													</Card.Body>
 												</Card>
-												{/* <h4>{item.title}</h4>
-												<div
-													style={{
-														wordWrap: "break-word",
-													}}
-												>
-													- {item.description}{" "}
-												</div>
-												<br></br>Assigner:{" "}
-												{item.assignerName}
-												<br></br>Assignee:{" "}
-												{item.assigneeName}
-												<br></br>Status: {item.status}
-												<br></br>Duedate: {item.duedate} */}
 											</div>
-
-											{user.id == item.creator ? (
-												<div className="flex-container">
-													<a
-														className="normal-button"
-														onClick={() =>
-															this.handleEditUser(
-																item
-															)
-														}
-													>
-														Edit
-													</a>
-													<a
-														className="normal-button"
-														onClick={() =>
-															this.handleDeleteUser(
-																item.id
-															)
-														}
-													>
-														Delete
-													</a>
-												</div>
-											) : null}
 										</li>
 									);
 								})}
@@ -486,8 +415,6 @@ class TasksPage extends React.Component {
 function mapState(state) {
 	const { jobs, authentication, users } = state;
 	const { user } = authentication;
-	// console.log(values);
-
 	return { user, jobs, users };
 }
 const actionCreators = {
@@ -504,6 +431,7 @@ const actionCreators = {
 	getValuesByMonth: userActions.getvaluesbymonth,
 	alertclear: userActions.alertclear,
 	logout: userActions.logout,
+	createTask: userActions.createtask,
 };
 const connectedPage = connect(mapState, actionCreators)(TasksPage);
 export { connectedPage as TasksPage };
